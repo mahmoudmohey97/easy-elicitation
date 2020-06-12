@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon.png">
+    <title>Home</title>
+    <link href="/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="/assets/dist/css/style.min.css" rel="stylesheet">
+    <link href="/assets/dist/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+<body>
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <div data-navbarbg="skin6" data-theme="light" data-layout="vertical" data-sidebartype="full" data-boxed-layout="full">
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <div class="navbar-header" data-logobg="skin5">
+                    <!-- This is for the sidebar toggle which is visible on mobile only -->
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <div class="navbar-brand">
+                        <a href="/ba" class="logo">
+                            <!-- Logo icon -->
+                            <b class="logo-icon">
+                                <!--You can put here icon as well // <i class="wi wi-sunset"></i> //-->
+                                <!-- Dark Logo icon -->
+                                <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                <!-- Light Logo icon -->
+                                <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                            </b>
+                        </a>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- End Logo -->
+                    <!-- ============================================================== -->
+                    <!-- ============================================================== -->
+                    <!-- Toggle which is visible on mobile only -->
+                    <!-- ============================================================== -->
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+                <!-- ============================================================== -->
+                <!-- End Logo -->
+                <!-- ============================================================== -->
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin6">
+                    <!-- ============================================================== -->
+                    <!-- toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-left mr-auto">
+                        <!-- ============================================================== -->
+                        <!-- Search -->
+                        <!-- ============================================================== -->
+                        <li class="nav-item search-box">
+                            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-magnify font-20 mr-1"></i>
+                                    <div class="ml-1 d-none d-sm-block">
+                                        <span>Search</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <form class="app-search position-absolute">
+                                <input type="text" class="form-control" placeholder="Search &amp; enter">
+                                <a class="srh-btn">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+                    <!-- ============================================================== -->
+                    <!-- Right side toggle and nav items -->
+                    <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right">
+                    
+                        <li>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link logout-btn" href="/ba" aria-expanded="false">
+                                <i class="mdi mdi-logout-variant"></i>
+                                <span class="hide-menu">logout</span>
+                            </a>
+                        </li>
+                       
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <!-- ============================================================== -->
+        <!-- End Topbar header -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+     
+        <!-- ============================================================== -->
+        <!-- End Left Sidebar - style you can find in sidebar.scss  -->
+        <!-- ============================================================== -->
+        <!-- ============================================================== -->
+        <!-- Page wrapper  -->
+        <!-- ============================================================== -->
+        <div class="page-wrapper">
+            <!-- ============================================================== -->
+            <!-- Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-5 align-self-center">
+                        <h4 class="page-title">YOUR PROJECTS</h4>
+                    </div>
+                    <div class="col-7 align-self-center">
+                        <div class="d-flex align-items-center justify-content-end">
+                            <!-- Button trigger modal -->
+                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter">
+                                Create Project
+                            </button>
+                            
+                            <!-- Modal -->
+                            <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Create Project</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close" onClick="history.go(0);">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    
+                                    
+                                    <form id="regForm" action="/ba" method="POST">
+                                        <h1 id="modal-header">Project</h1>
+                                        <!-- One "tab" for each step in the form: -->
+                                        <div class="tab">
+                                        <p><input class="fullInput" placeholder="Project Name..." id="projectName" name="name"></p>
+                                        </div>
+                                        <div class="tab">
+                                            <p><input class='fullInput' placeholder="Client E-mail..." id="clientEmail" name="email"></p>
+                                            <button style="float: left" type="button" onclick="inviteClient()"> Invite </button>
+                                        </div>
+                                        <div class="tab">
+                                            <div id="ba-list">
+
+                                            </div>
+                                        </div>
+                                        <div style="overflow:auto;">
+                                        <div style="float:right;">
+                                            <button class="btn-primary" type="button" id="nextBtn" onclick="nextPrev(1)">Next</button>
+                                        </div>
+                                        </div>
+                                        <!-- Circles which indicates the steps of the form: -->
+                                        <div style="text-align:center;margin-top:40px;">
+                                        <span class="step"></span>
+                                        <span class="step"></span>
+                                        <span class="step"></span>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            </div>      
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- ============================================================== -->
+            <!-- End Bread crumb and right sidebar toggle -->
+            <!-- ============================================================== -->
+            <!-- ============================================================== -->
+            <!-- Container fluid  -->
+            <!-- ============================================================== -->
+            <div class="container-fluid">
+                <!-- ============================================================== -->
+                <!-- Email campaign chart -->
+                <!-- ============================================================== -->
+                <div class="row">
+                  
+                    
+                    <%
+                    if(myProjects.length == 0){
+                    %>
+                            <div> No created Projects</div>
+                    <%
+                    }
+                    for(var i = 0; i <  myProjects.length; ++i){
+                    %>
+
+                        <div class="col-sm-6 col-mid-4 col-lg-3">
+                            <div class="card cardItem">
+                                <div class="card-body">
+                                    <a href="/project?pid=<%= myProjects[i].projectId %>"  class="cardLink">
+                                        <h4 class="card-title m-b-0"> <%= myProjects[i].name %></h4>
+                                        <h2 class="font-16"><span class="label <%= myProjects[i].approval === 0 ? 'label-info' : 'label-success '%> label-rounded"><%= myProjects[i].approval === 0 ? 'Pending ' : 'Approved '%></span></h2>
+                                        <div class="m-t-30">
+                                            <div class="row text-center">
+                                                <div class="col-6 border-right">
+                                                    <h4 class="m-b-0"> <%= myProjects[i].counts.businessAnalysts%> </h4>
+                                                    <span class="font-14 text-muted">BA</span>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h4 class="m-b-0"><%= myProjects[i].counts.clients %></h4>
+                                                    <span class="font-14 text-muted">CLIENT</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    <%
+                    }
+                    %>
+
+                </div>
+
+            </div>
+
+            <div class="page-breadcrumb">
+                <div class="row">
+                    <div class="col-5 align-self-center">
+                        <h4 class="page-title">PARTICIPATING IN </h4>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid">
+                <div class="row">
+            
+               <%
+                for(var i = 0; i <  projects.length; ++i){
+              %>
+                <div class="col-sm-6 col-mid-4 col-lg-3">
+                            <div class="card cardItem">
+                                <div class="card-body">
+                                    <a href="/project?pid=<%= projects[i].projectId %>"  class="cardLink">
+                                        <h4 class="card-title m-b-0"> <%= projects[i].name %></h4>
+                                        <h2 class="font-16"><span class="label <%= projects[i].approval === 0 ? 'label-info' : 'label-success '%> label-rounded"><%= projects[i].approval === 0 ? 'Pending ' : 'Approved '%></span></h2>
+                                        <div class="m-t-30">
+                                            <div class="row text-center">
+                                                <div class="col-6 border-right">
+                                                    <h4 class="m-b-0"><%= projects[i].counts.businessAnalysts %> </h4>
+                                                    <span class="font-14 text-muted">BA</span>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h4 class="m-b-0"><%= projects[i].counts.clients %></h4>
+                                                    <span class="font-14 text-muted">CLIENT</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+             
+                <%
+            }
+                %>
+
+                  
+                  
+                    
+                </div>
+
+            </div>
+           
+        </div>
+      
+    </div>
+    <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="/assets/dist/js/waves.js"></script>
+    <script src="/assets/dist/js/sidebarmenu.js"></script>
+    <script src="/assets/dist/js/custom.min.js"></script>
+    <script src="/assets/dist/js/pages/dashboards/dashboard1.js"></script>
+    <script src="/assets/js/script.js"></script>
+</body>
+
+</html>

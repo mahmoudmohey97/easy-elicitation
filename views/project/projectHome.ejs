@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon.png">
+    <title>Easy Elicitation - <%= projectName %> </title>
+    <link href="/assets/libs/chartist/dist/chartist.min.css" rel="stylesheet">
+    <link href="/assets/dist/css/style.min.css" rel="stylesheet">
+    <link href="/assets/dist/css/style.css" rel="stylesheet">
+    <link href="/assets/css/style.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+</head>
+<body>
+    <div class="preloader">
+        <div class="lds-ripple">
+            <div class="lds-pos"></div>
+            <div class="lds-pos"></div>
+        </div>
+    </div>
+    <div data-navbarbg="skin6" data-theme="light" data-layout="vertical" data-sidebartype="full" data-boxed-layout="full">
+        <header class="topbar" data-navbarbg="skin6">
+            <nav class="navbar top-navbar navbar-expand-md navbar-light">
+                <div class="navbar-header" data-logobg="skin5">
+                    <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)">
+                        <i class="ti-menu ti-close"></i>
+                    </a>
+                    <div class="navbar-brand">
+                        <a href="" class="logo">
+                            <b class="logo-icon">
+                                <img src="/assets/images/logo-icon.png" alt="homepage" class="dark-logo" />
+                                <img src="/assets/images/logo-light-icon.png" alt="homepage" class="light-logo" />
+                            </b>
+                        </a>
+                    </div>
+                    <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent"
+                        aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                        <i class="ti-more"></i>
+                    </a>
+                </div>
+                <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin6">
+                    <ul class="navbar-nav float-left mr-auto">
+                        <li class="nav-item search-box">
+                            <a class="nav-link waves-effect waves-dark" href="javascript:void(0)">
+                                <div class="d-flex align-items-center">
+                                    <i class="mdi mdi-magnify font-20 mr-1"></i>
+                                    <div class="ml-1 d-none d-sm-block">
+                                        <span>Search</span>
+                                    </div>
+                                </div>
+                            </a>
+                            <form action="" class="app-search position-absolute">
+                                <input type="text" class="form-control" placeholder="Search &amp; enter">
+                                <a class="srh-btn">
+                                    <i class="ti-close"></i>
+                                </a>
+                            </form>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav float-right">
+                        <li>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link logout-btn" href="/ba" aria-expanded="false">
+                                <i class="mdi mdi-logout-variant"></i>
+                                <span class="hide-menu">logout</span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <div class="page-wrapper">
+
+            <%
+            var privelages;
+            owner.id == userId && auth ? privelages=true : privelages=false ;
+            
+            %>
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="float-left" style="margin: 15px;"> <%= projectName %> </h1>
+
+                    <button class="btn btn-danger float-right" style="margin: 15px;">
+                    
+                        <% if(!privelages) {
+                            %>
+                            <a href="/leaveProject?pid=<%=projectId%>" style="color: white;">Leave Project</a>
+                            <%}
+                        else{
+                            %>
+                            <a href="/deleteProject?pid=<%=projectId%>"  style="color: white;">delete project</a>
+                      <%  } %>
+                      
+                    
+                    </button>
+
+                </div>
+            </div>
+            <div class="row">
+                <!-- column -->
+                
+                <div class="col-lg-6">
+                    <div class="card">
+                        <div class="card-body">
+                          
+                                <h2 class="card-title">Diagrams 
+                                   <% if(auth){
+                                        %>
+                                        <button class="float-right btn btn-primary" data-toggle="modal" data-target="#exampleModalCenter" style="font-size: 15px; padding: 5px;"> 
+                                    create diagram </button> 
+
+                                    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Create Diagram</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+                                    <form id="regForm" style="margin: auto" action="" onsubmit="return false;">
+                                        <input type="text" placeholder="Diagram Name..." id="diagramName" name="name" style="margin-left: 20px;">
+                                        <textarea type="text" placeholder="Description" id="diagramDescription" style="margin: 10px 20px; font-size: 17px; resize: none" name="name" cols="22" rows="7"></textarea>
+                                        <div style="text-align: center;"><button type="submit" class="btn btn-primary" onclick="create()">Create Diagram  </button> </div>
+                                    </form>
+                                </div>
+                            </div>
+                            </div>   
+                                    <%}%>
+                                    </h2>
+                        </div>
+                        <div class="comment-widgets" style="height:430px;">
+                            <!-- Comment Row -->
+                            <% for(var i = 0 ; i < diagrams.length ; i++){
+                                
+
+                                var count = diagrams[i].description.split(/\n/g);
+
+                                %>
+                            <div class="d-flex flex-row comment-row m-t-0"  onclick="location.replace('http://localhost:3000/getDiagram/<%= diagrams[i].diagramId %>')">
+                                <div class="comment-text active">
+                                    <h6 class="font-20 font-medium"><%= diagrams[i].name %></h6>
+                                    <span class="m-b-15 d-block"> <% for(var j = 0; j < count.length; ++j){
+                                        %>
+                                            <%= count[j] %>
+                                             <br>
+                                        <% } %>
+                                         </span>
+                                    <div class="comment-footer">
+                                        <span class="label label-rounded label-primary">Pending</span>
+                                        <span class="action-icons active" onClick="event.stopPropagation()">
+                                            <% if(auth){
+                                            %>
+                                        <button style="background: transparent; color: gray; padding: 5px" onclick="addRelation('relationDiv<%= i %>')"> Add Relation </button>
+                                          
+                                            <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Approve">
+                                                <i class="ti-check"style="font-size: 15px;"></i>
+                                            </a>
+                                            <a href="/deleteDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Delete">
+                                                <i class="mdi mdi-delete" style="font-size: 20px;"></i>
+                                            </a>
+                                            <%}%>
+                                        </span>
+                                        <div style="display: none" class="comment-footer" id="relationDiv<%=i%>"  onClick="event.stopPropagation()">
+                                 <form action="" onsubmit="return reloadFun()" class="form-container" >
+                                            <label>Choose diagram:</label>
+                                <select id="diagramRelationSelector<%=i%>" style="height: 30px; margin: 6px">
+                                <%for(var j = 0 ; j < diagrams.length ; j++){
+                                    if(diagrams[i].name != diagrams[j].name)
+                                    {
+                                    %>    
+                                        <option value="<%=diagrams[j].diagramId%>"> <%=diagrams[j].name%> </option>
+                               <%     }
+                                } %>
+                                </select>   
+                                <input id="relationName<%=i%>" type="text" placeholder="relation name" required style="height: 30px;">
+                                
+                                <button type="submit" style="padding: 5px" onclick="addDiagramRelation('diagramRelationSelector<%=i%>', '<%=diagrams[i].diagramId%>', 'relationName<%=i%>')">Add</button>
+                                <button style="background: transparent; color: gray; padding: 5px" onclick="addRelation('relationDiv<%= i %>')"> cancel </button>
+                            </form>           
+                                </div>
+                                    </div>
+                                    <!-- <div></div> -->
+                                </div>
+                            </div>
+                            <%}%>
+                        </div>
+                       
+                    </div>
+                </div>
+                <!-- column -->
+                <div class="col-lg-6" >
+                    <div class="card" >
+                        <div class="card-body">
+                            <h3 class="card-title">Diagrams relations </h3>
+                            <div class="comment-widgets" style="height:439px;">
+                                <table class="table no-border mini-table m-t-20">
+                                    <tbody>
+                                        <%
+                                        for(var k = 0; k < diagramsRelations.length; ++k){
+                                           
+                                            
+                                        %>
+                                        <tr>
+                                            <td class="font-medium"><%= diagramsRelations[k].diagram1Name%> </td>
+                                            <td class="text-muted"><%= diagramsRelations[k].type %></td>
+                                            <td class="font-medium"><%= diagramsRelations[k].diagram2Name%></td>
+                                            <td style="padding: 10px"><button class="btn btn-danger" onclick="deleteRelation('<%= diagramsRelations[k].relationId%>')"> delete</button></td>
+                                        </tr>
+                                        <%}%>
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                            
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-12" >
+                    <div class="card" >
+                        <div class="card-body">
+
+                            <h3 class="card-title"> attachements - PDF only </h3>
+                        
+                        <% if(attachements.length > 0){  
+                                for(var i = 0 ; i < attachements.length; i++)
+                                { %>
+                                    <div>  
+                                        
+                                        <hr>
+                                        <a href="<%=attachements[i].link%>"> <%=attachements[i].name%> </a> 
+                                        <hr>              
+                                    </div> 
+                            <%    
+                                }
+                            }%>
+                                <form method="POST" action="" onsubmit="return reloadFun()" class="form-container" id="attachment">
+                           
+                                    Upload : <input type="file" name="someExpressFiles" multiple="multiple" class="form-control"/>
+                                    <input type="submit" class="form-control col-1 btn-primary float-right" style="margin-top: 10px;" onclick="addAttachment()" value="Upload" />
+                                    
+                                </form>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+            
+                  
+
+            <div class="row">
+                <!-- column -->
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <h2 class="card-title"> Participants 
+                                
+                            <% if(auth)
+                            {%>
+                                <button class="float-right btn btn-secondary" data-toggle="modal" data-target="#modal2" style="background-color: #137eff; font-size: 15px; padding: 5px; border: none;" onclick="getBasInProjectHome()"> 
+                                    Invite BA </button>
+
+
+                                    <div class="modal fade" id="modal3" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Invite Client</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+
+                                    <div  style="margin: 50px auto 50px auto">
+                                        <input type="text" id="clientMail"  placeholder="Client Mail" name="clientMail">
+                                        <button type="button"  class="btn float-right" style="margin-top: 5px; margin-left: 10px;" onclick="invite()">Invite</button>
+                                    </div>
+                                    <div id="sent-msg" style="margin: -30px auto 10px; font-size: 25px;" hidden="true">
+                                        SENT
+                                    </div>
+
+                                    
+                                </div>
+                            </div>
+                            </div> 
+                                    
+                                <button class="float-right btn" data-toggle="modal" data-target="#modal3" 
+                                style="background-color: #5AC153; font-size: 15px; padding: 5px; margin-right: 10px; border: none"> 
+                                    Invite Client </button>
+
+                                    <div class="modal fade" id="modal2" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLongTitle">Invite Business Analyst </h5>
+                                    <button id='closing-btn' type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                    </div>
+
+                                    <div id="ba-list"> </div>
+                                    
+
+                                    
+                                </div>
+                            </div>
+                            </div>
+
+                            <%}%>
+                                </h2>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                    <tr>
+                                        <th class="border-1">NAME</th>
+                                        <th class="border-1">ROLE</th>
+                                        <th class="border-1">EMAIL</th>
+                                         <%
+                                                if(privelages){
+                                                %>      
+                                                    <th class="border-1"> </th>
+                                                    
+                                                <%}%>
+                                        
+
+                                    </tr>
+                                </thead>
+                                <tbody> <!-- label-info label-success label-purple-->
+                                    <tr>
+                                        <td class="txt-oflo"><%= owner.name %></td>
+                                        <td><span class="label label-purple label-rounded" style="font-size: 12px;"> owner </span> </td>
+                                        <td class="txt-oflo"><%= owner.email%></td>
+                                        <%
+                                                if(privelages){
+                                                %>      
+                                                    <th class="border-1"> </th>
+                                                    
+                                                <%}%>
+                                    </tr>
+                                    <%
+                                        for(var i = 0; i < businessAnalysts.length; ++i){
+                                        %>
+                                            <tr>
+                                                <td class="txt-oflo"><%= businessAnalysts[i].name %></td>
+                                                <td><span class="label label-info label-rounded" style="font-size: 12px;"> Business analyst </span> </td>
+                                                <td class="txt-oflo"><%= businessAnalysts[i].email %></td>
+                                                <%
+                                                if(privelages){
+                                                %>      
+                                                    <th class="border-1"> <a href="" onclick="removeBa('<%=businessAnalysts[i].businessAnalystId %>')" style="color: red"> Remove </a></th>
+                                                    
+                                                <%}%>
+                                            </tr>
+                                    <%
+                                        } 
+                                        for(var i = 0; i < clients.length; ++i){
+                                        %>
+                                            <tr>
+                                                <td class="txt-oflo"><%= clients[i].name %></td>
+                                                <td><span class="label label-success label-rounded" style="font-size: 12px;"> client </span> </td>
+                                                <td class="txt-oflo"><%= clients[i].email %></td>
+                                                <%
+                                                if(privelages){
+                                                %>      
+                                                    <th class="border-1"> <a href="" onclick="removeClient('<%= clients[i].clientId%>')" style="color: red"> Remove</a></th>
+                                                    
+                                                <%}%>
+                                            </tr>
+                                            
+
+                                    <%
+                                        }
+                                    %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="/assets/libs/jquery/dist/jquery.min.js"></script>
+    <script src="/assets/libs/popper.js/dist/umd/popper.min.js"></script>
+    <script src="/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="/assets/dist/js/waves.js"></script>
+    <script src="/assets/dist/js/sidebarmenu.js"></script>
+    <script src="/assets/dist/js/custom.min.js"></script>
+    <script src="/assets/dist/js/pages/dashboards/dashboard1.js"></script>
+    
+<script>
+
+var mails = [];
+$(document).ready(function () {
+    $(document).on("click", 'input[type="checkbox"]', function (e) {
+        var checkedMail = $(this).parent().children()[1].innerHTML;
+        if ($(this).prop("checked") == true) {
+            mails.push(checkedMail);
+        }
+        else if ($(this).prop("checked") == false) {
+            const index = mails.indexOf(checkedMail);
+            mails.splice(index, 1);
+        }
+    });
+});
+
+function reloadFun(){
+    let url = window.location.href;
+    location.reload();
+    return false;
+    
+}
+
+function addRelation(id) {
+    console.log('print');
+    
+    if(document.getElementById(id).style.display == "block")
+        document.getElementById(id).style.display = "none"
+    else
+        document.getElementById(id).style.display = "block"
+}
+
+function closeForm(id) {
+    document.getElementById(id).style.display = "none";
+}
+
+function addDiagramRelation(id, diagram1Id, relationName){
+    var e = document.getElementById(id);
+    var diagram2Id = e.options[e.selectedIndex].value;
+    diagramRelationName = document.getElementById(relationName).value;
+    var xhttp = new XMLHttpRequest();
+    let url = window.location.href;
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+
+        }
+    };
+    xhttp.open("POST", "/createDiagramRelation", true);
+    xhttp.setRequestHeader('pid', pid)
+    xhttp.setRequestHeader("diagram1Id", diagram1Id);
+    xhttp.setRequestHeader('diagram2Id', diagram2Id);
+    xhttp.setRequestHeader('relationName', diagramRelationName);
+    xhttp.send();
+    
+}
+
+function create() {
+
+    var xhttp = new XMLHttpRequest();
+    let url = window.location.href;
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            location.reload();
+            console.log('here');
+            
+        }
+        else if(this.readyState == 4 && this.status == 400){
+            alert("Diagram name already exists");
+            
+        }
+    };
+    var name = document.getElementById("diagramName").value;
+    var description = document.getElementById("diagramDescription").value;
+    description = description.replace(/\n/g, '(newLine)');
+    xhttp.open("POST", "/createDiagram", true);
+    xhttp.setRequestHeader('pid', pid)
+    xhttp.setRequestHeader("name", name);
+    xhttp.setRequestHeader('description', description);
+    xhttp.send();
+}
+
+function addAttachment() {
+    var xhttp = new XMLHttpRequest();
+    let url = window.location.href;
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    
+    formData = new FormData();
+    formData.append('file', $('input[type=file]')[0].files[0]);
+    formData.append('pid', pid);
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+        }
+    };
+    console.log(formData.get('file'));
+    xhttp.open("POST", "/upload", true);
+    xhttp.send(formData);
+}
+
+function getBasInProjectHome() {
+    if (document.getElementById("ba-list").childElementCount != 0) {
+        return;
+    }
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("ba-list").style = "padding: 20px";
+            var arr = this.responseText.split(",");
+            for (var i = 0; i < arr.length; ++i) {
+                var node = document.createElement("DIV");
+                node.setAttribute("id", i);
+                node.setAttribute("style", 'font-size: 15px');
+                var subNode1 = document.createElement("INPUT");
+                subNode1.setAttribute("type", "checkbox");
+                subNode1.setAttribute('id', `check${i}`);
+                var textnode = document.createElement("label");
+                textnode.setAttribute('for', `check${i}`)
+                textnode.setAttribute('style', 'margin-left: 10px')
+                textnode.innerHTML = arr[i];
+                node.appendChild(subNode1);
+                node.appendChild(textnode);
+                document.getElementById("ba-list").appendChild(node);
+            }
+            if(arr.length != 0){
+                
+                var div = document.createElement("DIV");
+                var button = document.createElement("button");
+                div.appendChild(button);
+                div.setAttribute('style', 'text-align: center;padding: 15px;')
+                button.setAttribute('style', "padding: 10px; border-radius: 3px; font-size: 13px; background-color: #137eff")
+                button.setAttribute('type', "button");
+                button.setAttribute('onclick', "inviteBas()");
+                button.innerHTML = "Invite";
+                document.getElementById("ba-list").appendChild(div);
+            }
+            else
+                {
+                    var paragraph = document.createElement("p");
+                    button.innerHTML = "All BAs already invited";
+                    document.getElementById("ba-list").appendChild(button);
+                }
+        }
+
+    };
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    xhttp.open("GET", "/getBasNotInProject", true);
+    xhttp.setRequestHeader('projectId', pid);
+    xhttp.send();
+}
+
+function inviteBas() {
+    //var name = document.getElementById("projectName").value;
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+
+    if(mails.length != 0 && pid){
+        $.ajax({
+            type: "POST",
+            data: { data : mails,
+                'projectId' :pid
+            },
+            url: "/sendEmailToBA",
+            success: function () {
+                console.log('Successful');
+                $("#closing-btn").click();
+            }
+        });
+    }        
+}
+
+function invite() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            document.getElementById("sent-msg").removeAttribute('hidden');
+             $('#sent-msg').delay(500).fadeOut('slow');
+
+             $("#sent-msg").fadeOut("slow", function() {
+                 $("#sent-msg").attr("style", "display: none !important");
+                 setTimeout(function(){
+                     document.getElementById("sent-msg").setAttribute('hidden', 'true');
+                     document.getElementById("sent-msg").style = "margin: -30px auto 10px; font-size: 25px;";
+                    }, 600);
+            });
+            
+        }
+    };
+    //var name = document.getElementById("projectName").value;
+    var mail = document.getElementById("clientMail").value;
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    xhttp.open("GET", "/sendEmail?pid=" + pid + "&" + "mail=" + mail, true);
+    xhttp.send();
+    document.getElementById("clientMail").value = "";
+
+}
+
+function deleteRelation(id){
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            location.reload();
+        }
+    };
+    xhttp.open("POST", 'deleteRelation', true);
+    xhttp.setRequestHeader('relationId', id);
+    xhttp.send();
+    
+}
+
+function removeBa(baid){
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            location.reload();
+        }
+    };
+    xhttp.open("POST", 'removeBa', true);
+    xhttp.setRequestHeader('pid', pid);
+    xhttp.setRequestHeader('baid', baid);
+    xhttp.send();
+    
+}
+
+function removeClient(cid){
+    let params = new URLSearchParams(location.search);
+    pid = params.get('pid');
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function(){
+        if(this.readyState == 4 && this.status == 200){
+            location.reload();
+        }
+    };
+    xhttp.open("POST", 'removeClient', true);
+    xhttp.setRequestHeader('pid', pid);
+    xhttp.setRequestHeader('cid', cid);
+    xhttp.send();
+    
+}
+</script>
+</body>
+
+</html>
+
+
+
+
+
