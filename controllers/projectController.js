@@ -16,6 +16,8 @@ module.exports.projectHome = async function (req, res) {
         var project = await model.getProjectById(req.query.pid);
         var baParticipants = await model.getProjectBa(req.query.pid);
         // console.log(baParticipants);
+        var approved = (req.session.baid) ? await diagramModel.getBaApprovals(req.session.baid) : await diagramModel.getCApprovals(req.session.cid);
+        approved = JSON.parse(JSON.stringify(approved));
         var clientsParticipants = await model.getProjectClients(req.query.pid);
         var projectDiagrams = await diagramModel.showProjectDiagrams(req);
         var diagramsRelations = await diagramModel.getProjectRelations(req.query.pid);
@@ -30,7 +32,7 @@ module.exports.projectHome = async function (req, res) {
             diagramsRelations: diagramsRelations,
             clients: clientsParticipants, userId: userId,
             owner: { email: owner.email, name: owner.name, id: owner.businessAnalystId },
-            attachements: attachements, projectId: req.query.pid
+            attachements: attachements, projectId: req.query.pid, approved: approved
         });
     }
     else {

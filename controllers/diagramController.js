@@ -30,16 +30,44 @@ module.exports.deleteDiagramRelation = async function (req, res) {
 }
 
 module.exports.createDiagram = async function (req, res) {
-    
+
     var name = req.get('name');
     var description = req.get('description');
     var projectId = req.get('pid');
     description = description.replace(/\(newLine\)/g, "\n");
-    try{
-        await  model.addDiagram(name, description, projectId);
+    try {
+        await model.addDiagram(name, description, projectId);
         res.send(200);
     }
-    catch(error){
+    catch (error) {
         res.send(400);
     }
+}
+
+module.exports.approveDiagram = async function (req, res) {
+    if (req.session.cid) {
+        model.cApprove(req.query.did, req.session.cid);
+    }
+    else if (req.session.baid) {
+        model.baApprove(req.query.did, req.session.baid);
+    }
+    else {
+        res.send(400);
+        return;
+    }
+    res.redirect(req.get('referer'));
+}
+
+module.exports.revokeApproveDiagram = async function (req, res) {
+    if (req.session.cid) {
+        model.cRevokeApprove(req.query.did, req.session.cid);
+    }
+    else if (req.session.baid) {
+        model.baRevokeApprove(req.query.did, req.session.baid);
+    }
+    else {
+        res.send(400);
+        return;
+    }
+    res.redirect(req.get('referer'));
 }

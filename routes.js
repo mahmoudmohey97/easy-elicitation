@@ -37,6 +37,8 @@ router.post('/removeClient', projectController.removeClient);
 router.get('/leaveProject', projectController.leaveProject);
 router.get('/deleteProject', projectController.deleteProject);
 router.get('/deleteDiagram', diagramController.deleteDiagram);
+router.get('/approveDiagram', diagramController.approveDiagram);
+router.get('/revokeApproveDiagram', diagramController.revokeApproveDiagram);
 router.post("/createDiagramRelation", diagramController.addDiagramRelation);
 // router.get("/getProjectRelations", diagramController.projectRelations); // for diagram relations
 router.get("/deleteRelation", diagramController.deleteDiagramRelation);

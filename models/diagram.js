@@ -83,3 +83,51 @@ module.exports.getDiagram = async function (did) {
 	const output = await query(sql);
 	return output[0];
 };
+
+module.exports.baApprove = async function (did, baid) {
+	let sql = "insert into approvals(did, baid) values(?, ?)"
+	let inserts = [did, baid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+};
+
+module.exports.cApprove = async function (did, cid) {
+	let sql = "insert into approvals(did, cid) values(?, ?)"
+	let inserts = [did, cid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+};
+
+module.exports.getBaApprovals = async function(baid) {
+	let sql = "select did from approvals where baid=?";
+	let inserts = [baid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+}
+
+module.exports.getCApprovals = async function(cid) {
+	let sql = "select did from approvals where cid=?";
+	let inserts = [cid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+}
+
+module.exports.baRevokeApprove = async function (did, baid) {
+	let sql = "delete from approvals where did=? and baid=?"
+	let inserts = [did, baid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+};
+
+module.exports.cRevokeApprove = async function (did, cid) {
+	let sql = "delete from approvals where did=? and cid=?"
+	let inserts = [did, cid];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+};

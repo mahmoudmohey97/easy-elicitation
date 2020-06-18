@@ -139,9 +139,9 @@
                                 var count = diagrams[i].description.split(/\n/g);
 
                                 %>
-                            <div class="d-flex flex-row comment-row m-t-0"  onclick="location.replace('http://localhost:3000/getDiagram/<%= diagrams[i].diagramId %>')">
+                            <div class="d-flex flex-row comment-row m-t-0">
                                 <div class="comment-text active">
-                                    <h6 class="font-20 font-medium"><%= diagrams[i].name %></h6>
+                                    <a href='http://localhost:3000/getDiagram/<%= diagrams[i].diagramId %>'><h6 class="font-20 font-medium"><%= diagrams[i].name %></h6></a>
                                     <span class="m-b-15 d-block"> <% for(var j = 0; j < count.length; ++j){
                                         %>
                                             <%= count[j] %>
@@ -154,12 +154,17 @@
                                             <% if(auth){
                                             %>
                                         <button style="background: transparent; color: gray; padding: 5px" onclick="addRelation('relationDiv<%= i %>')"> Add Relation </button>
-                                          
-                                            <a href="javascript:void(0)" data-toggle="tooltip" data-placement="top" title="Approve">
-                                                <i class="ti-check"style="font-size: 15px;"></i>
+                                            <% if (!approved.some(approve => approve.did === diagrams[i].diagramId)) {%>
+                                            <a href="/approveDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Approve">
+                                                <i class="ti-check"style="font-size: 20px;"></i>
                                             </a>
+                                            <% } else {%>
+                                                <a href="/revokeApproveDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Disapprove">
+                                                    <i class="ti-check" style="font-size: 20px; color:green"></i>
+                                                </a>
+                                            <% } %>
                                             <a href="/deleteDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Delete">
-                                                <i class="mdi mdi-delete" style="font-size: 20px;"></i>
+                                                <i class="mdi mdi-delete" style="font-size: 25px;"></i>
                                             </a>
                                             <%}%>
                                         </span>
