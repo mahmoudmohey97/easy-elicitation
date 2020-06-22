@@ -72,8 +72,8 @@ EditorUi = function(editor, container, lightbox)
 		// Disables text selection while not editing and no dialog visible
 		if (this.container == document.body)
 		{
-			this.menubarContainer.onselectstart = textEditing;
-			this.menubarContainer.onmousedown = textEditing;
+			// this.menubarContainer.onselectstart = textEditing;
+			// this.menubarContainer.onmousedown = textEditing;
 			this.toolbarContainer.onselectstart = textEditing;
 			this.toolbarContainer.onmousedown = textEditing;
 			this.diagramContainer.onselectstart = textEditing;
@@ -3198,7 +3198,7 @@ EditorUi.prototype.refresh = function(sizeDidChange)
 	
 	if (this.toolbar != null)
 	{
-		this.toolbarContainer.style.top = this.menubarHeight + 'px';
+		this.toolbarContainer.style.top = '0px';
 		this.toolbarContainer.style.height = this.toolbarHeight + 'px';
 		tmp += this.toolbarHeight;
 	}
@@ -3303,7 +3303,7 @@ EditorUi.prototype.createTabContainer = function()
  */
 EditorUi.prototype.createDivs = function()
 {
-	this.menubarContainer = this.createDiv('geMenubarContainer');
+	// this.menubarContainer = this.createDiv('geMenubarContainer');
 	this.toolbarContainer = this.createDiv('geToolbarContainer');
 	this.sidebarContainer = this.createDiv('geSidebarContainer');
 	this.formatContainer = this.createDiv('geSidebarContainer geFormatContainer');
@@ -3313,9 +3313,9 @@ EditorUi.prototype.createDivs = function()
 	this.hsplit.setAttribute('title', mxResources.get('collapseExpand'));
 
 	// Sets static style for containers
-	this.menubarContainer.style.top = '0px';
-	this.menubarContainer.style.left = '0px';
-	this.menubarContainer.style.right = '0px';
+	// this.menubarContainer.style.top = '0px';
+	// this.menubarContainer.style.left = '0px';
+	// this.menubarContainer.style.right = '0px';
 	this.toolbarContainer.style.left = '0px';
 	this.toolbarContainer.style.right = '0px';
 	this.sidebarContainer.style.left = '0px';
@@ -3358,12 +3358,12 @@ EditorUi.prototype.createSidebarFooterContainer = function()
 EditorUi.prototype.createUi = function()
 {
 	// Creates menubar
-	this.menubar = (this.editor.chromeless) ? null : this.menus.createMenubar(this.createDiv('geMenubar'));
+	// this.menubar = (this.editor.chromeless) ? null : this.menus.createMenubar(this.createDiv('geMenubar'));
 	
-	if (this.menubar != null)
-	{
-		this.menubarContainer.appendChild(this.menubar.container);
-	}
+	// if (this.menubar != null)
+	// {
+	// 	this.menubarContainer.appendChild(this.menubar.container);
+	// }
 	
 	// Adds status bar in menubar
 	if (this.menubar != null)
