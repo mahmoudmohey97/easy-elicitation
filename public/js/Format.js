@@ -5033,29 +5033,13 @@ StyleFormatPanel.prototype.addStroke = function(container)
 	});
 
 	// EASY ELICITATION
-	var pattern = this.editorUi.toolbar.addMenuFunctionInContainer(stylePanel, 'geSprite-connection', mxResources.get('connection'), false, mxUtils.bind(this, function(menu)
+	var pattern = this.editorUi.toolbar.addMenuFunctionInContainer(stylePanel, 'geSprite-orthogonal', mxResources.get('pattern'), false, mxUtils.bind(this, function(menu)
 	{
-		var _addItem = mxUtils.bind(this, function(menu, width, cssName, value, keys, values)
-		{
-			var item = this.editorUi.menus.edgeStyleChange(menu, '', keys, values, 'geIcon', null, true);
-		
-			var pat = document.createElement('div');
-			pat.style.width = width + 'px';
-			// pat.style.height = '10px';
-			pat.style.borderBottom = '1px ' + cssName + ' ' + 'black';
-			pat.style.paddingTop = '2px';
-			pat.style.fontSize = '12px';
-			pat.append(value);
-			
-			item.firstChild.firstChild.style.padding = '0px 4px 6px 4px';
-			item.firstChild.firstChild.style.width = width + 'px';
-			item.firstChild.firstChild.appendChild(pat);
-			
-			return item;
-		});
-		_addItem(menu, 50, 'solid', 'Includes', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], [null, null, 'includes']).setAttribute('title', mxResources.get('solid'));
-		_addItem(menu, 50, 'dashed', 'Requires', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', null, 'requires']).setAttribute('title', mxResources.get('dashed'));
-		_addItem(menu, 50, 'dotted', 'Extends', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', '1 2', 'extends']).setAttribute('title', mxResources.get('dotted'));
+		addItem(menu, 75, 'solid', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN], [null, null]).setAttribute('title', mxResources.get('solid'));
+		addItem(menu, 75, 'dashed', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN], ['1', null]).setAttribute('title', mxResources.get('dashed'));
+		addItem(menu, 75, 'dotted', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN], ['1', '1 1']).setAttribute('title', mxResources.get('dotted') + ' (1)');
+		addItem(menu, 75, 'dotted', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN], ['1', '1 2']).setAttribute('title', mxResources.get('dotted') + ' (2)');
+		addItem(menu, 75, 'dotted', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN], ['1', '1 4']).setAttribute('title', mxResources.get('dotted') + ' (3)');
 	}));
 	
 	// Used for mixed selection (vertices and edges)
@@ -5071,12 +5055,12 @@ StyleFormatPanel.prototype.addStroke = function(container)
 
 	var altPattern = this.editorUi.toolbar.addMenuFunctionInContainer(altStylePanel, 'geSprite-connection', mxResources.get('connection'), false, mxUtils.bind(this, function(menu)
 	{
-		var _addItem = mxUtils.bind(this, function(menu, width, cssName, value, keys, values)
+		var _addItem = mxUtils.bind(this, function(menu, width, cssName, value, keys, values, className)
 		{
-			var item = this.editorUi.menus.edgeStyleChange(menu, '', keys, values, 'geIcon', null, true);
+			var item = this.editorUi.menus.edgeStyleChange(menu, '', keys, values, className, null, true);
 		
 			var pat = document.createElement('div');
-			pat.style.width = width + 'px';
+			pat.style.width = (width - 10) + 'px';
 			// pat.style.height = '10px';
 			pat.style.borderBottom = '1px ' + cssName + ' ' + 'black';
 			pat.style.paddingTop = '2px';
@@ -5085,13 +5069,20 @@ StyleFormatPanel.prototype.addStroke = function(container)
 			
 			item.firstChild.firstChild.style.padding = '0px 4px 6px 4px';
 			item.firstChild.firstChild.style.width = width + 'px';
+			if(className.indexOf('geSprite-endclassic') == -1)
+				item.firstChild.firstChild.style.backgroundPosition = '36px -1695px';
+			else
+				item.firstChild.firstChild.style.backgroundPosition = '36px -1373px';
+			
 			item.firstChild.firstChild.appendChild(pat);
 			
 			return item;
 		});
-		_addItem(menu, 50, 'solid', 'Includes', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], [null, null, 'includes']).setAttribute('title', mxResources.get('solid'));
-		_addItem(menu, 50, 'dashed', 'Requires', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', null, 'requires']).setAttribute('title', mxResources.get('dashed'));
-		_addItem(menu, 50, 'dotted', 'Extends', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', '1 2', 'extends']).setAttribute('title', mxResources.get('dotted'));
+		_addItem(menu, 50, 'solid', '', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, '', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', '');
+		_addItem(menu, 50, 'solid', 'Includes', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, 'includes', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Includes');
+		_addItem(menu, 50, 'dashed', 'Requires', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], ['1', null, 'requires', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Requires');
+		_addItem(menu, 50, 'dotted', 'Extends', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], ['1', '1 2', 'extends', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Extends');
+		_addItem(menu, 50, 'solid', 'Inherits', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, '', mxConstants.ARROW_BLOCK, 0], 'geIcon geSprite geSprite-endblocktrans').setAttribute('title', 'Inherits');
 	}));
 	
 	var stylePanel2 = stylePanel.cloneNode(false);
@@ -5304,19 +5295,19 @@ StyleFormatPanel.prototype.addStroke = function(container)
 	this.addArrow(lineEnd);
 	
 	var symbol = this.addArrow(pattern, 9);
-	symbol.className = 'geSprite geSprite-connection';
+	symbol.className = 'geIcon';
 	symbol.style.width = '84px';
 	
 	var altSymbol = this.addArrow(altPattern, 9);
 	altSymbol.className = 'geSprite geSprite-connection';
 	altSymbol.style.width = '22px';
 	
-	// var solid = document.createElement('div');
-	// solid.style.width = '85px';
-	// solid.style.height = '1px';
-	// solid.style.borderBottom = '1px solid ' + this.defaultStrokeColor;
-	// solid.style.marginBottom = '9px';
-	// symbol.appendChild(solid);
+	var solid = document.createElement('div');
+	solid.style.width = '85px';
+	solid.style.height = '1px';
+	solid.style.borderBottom = '1px solid ' + this.defaultStrokeColor;
+	solid.style.marginBottom = '9px';
+	symbol.appendChild(solid);
 	
 	// var altSolid = document.createElement('div');
 	// altSolid.style.width = '23px';
@@ -5441,44 +5432,44 @@ StyleFormatPanel.prototype.addStroke = function(container)
 		ss = this.format.getSelectionState();
 		var color = mxUtils.getValue(ss.style, strokeKey, null);
 
-		// if (force || document.activeElement != input)
-		// {
-		// 	var tmp = parseInt(mxUtils.getValue(ss.style, mxConstants.STYLE_STROKEWIDTH, 1));
-		// 	input.value = (isNaN(tmp)) ? '' : tmp + ' pt';
-		// }
+		if (force || document.activeElement != input)
+		{
+			var tmp = parseInt(mxUtils.getValue(ss.style, mxConstants.STYLE_STROKEWIDTH, 1));
+			input.value = (isNaN(tmp)) ? '' : tmp + ' pt';
+		}
 		
-		// if (force || document.activeElement != altInput)
-		// {
-		// 	var tmp = parseInt(mxUtils.getValue(ss.style, mxConstants.STYLE_STROKEWIDTH, 1));
-		// 	altInput.value = (isNaN(tmp)) ? '' : tmp + ' pt';
-		// }
+		if (force || document.activeElement != altInput)
+		{
+			var tmp = parseInt(mxUtils.getValue(ss.style, mxConstants.STYLE_STROKEWIDTH, 1));
+			altInput.value = (isNaN(tmp)) ? '' : tmp + ' pt';
+		}
 		
-		// styleSelect.style.visibility = (ss.style.shape == 'connector' || ss.style.shape == 'filledEdge') ? '' : 'hidden';
+		styleSelect.style.visibility = (ss.style.shape == 'connector' || ss.style.shape == 'filledEdge') ? '' : 'hidden';
 		
-		// if (mxUtils.getValue(ss.style, mxConstants.STYLE_CURVED, null) == '1')
-		// {
-		// 	styleSelect.value = 'curved';
-		// }
-		// else if (mxUtils.getValue(ss.style, mxConstants.STYLE_ROUNDED, null) == '1')
-		// {
-		// 	styleSelect.value = 'rounded';
-		// }
+		if (mxUtils.getValue(ss.style, mxConstants.STYLE_CURVED, null) == '1')
+		{
+			styleSelect.value = 'curved';
+		}
+		else if (mxUtils.getValue(ss.style, mxConstants.STYLE_ROUNDED, null) == '1')
+		{
+			styleSelect.value = 'rounded';
+		}
 		
-		// if (mxUtils.getValue(ss.style, mxConstants.STYLE_DASHED, null) == '1')
-		// {
-		// 	if (mxUtils.getValue(ss.style, mxConstants.STYLE_DASH_PATTERN, null) == null)
-		// 	{
-		// 		solid.style.borderBottom = '1px dashed ' + this.defaultStrokeColor;
-		// 	}
-		// 	else
-		// 	{
-		// 		solid.style.borderBottom = '1px dotted ' + this.defaultStrokeColor;
-		// 	}
-		// }
-		// else
-		// {
-		// 	solid.style.borderBottom = '1px solid ' + this.defaultStrokeColor;
-		// }
+		if (mxUtils.getValue(ss.style, mxConstants.STYLE_DASHED, null) == '1')
+		{
+			if (mxUtils.getValue(ss.style, mxConstants.STYLE_DASH_PATTERN, null) == null)
+			{
+				solid.style.borderBottom = '1px dashed ' + this.defaultStrokeColor;
+			}
+			else
+			{
+				solid.style.borderBottom = '1px dotted ' + this.defaultStrokeColor;
+			}
+		}
+		else
+		{
+			solid.style.borderBottom = '1px solid ' + this.defaultStrokeColor;
+		}
 		
 		// altSolid.style.borderBottom = solid.style.borderBottom;
 		
