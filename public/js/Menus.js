@@ -772,9 +772,8 @@ Menus.prototype.edgeStyleChange = function(menu, label, keys, values, sprite, pa
 					edges.push(cell);
 				}
 			}
-			if (values[2] == 'requires' || 
-				values[2] == 'includes' ||
-				values[2] == 'extends')
+			// EASY ELICITATION
+			if (keys.includes('shape'))
 					for (var i = 0; i < edges.length; i++)
 						edges[i].value = values[2];
 			this.editorUi.fireEvent(new mxEventObject('styleChanged', 'keys', keys,

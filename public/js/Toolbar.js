@@ -144,12 +144,12 @@ Toolbar.prototype.init = function()
 			this.edgeShapeMenu = this.addMenuFunction('', mxResources.get('connection'), false, mxUtils.bind(this, function(menu)
 			{
 				// EASY ELICITATION
-				var addItem = mxUtils.bind(this, function(menu, width, cssName, value, keys, values)
+				var addItem = mxUtils.bind(this, function(menu, width, cssName, value, keys, values, className)
 				{
-					var item = this.editorUi.menus.edgeStyleChange(menu, '', keys, values, 'geIcon', null, true);
+					var item = this.editorUi.menus.edgeStyleChange(menu, '', keys, values, className, null, true);
 				
 					var pat = document.createElement('div');
-					pat.style.width = width + 'px';
+					pat.style.width = (width - 10) + 'px';
 					// pat.style.height = '10px';
 					pat.style.borderBottom = '1px ' + cssName + ' ' + 'black';
 					pat.style.paddingTop = '2px';
@@ -158,13 +158,21 @@ Toolbar.prototype.init = function()
 					
 					item.firstChild.firstChild.style.padding = '0px 4px 6px 4px';
 					item.firstChild.firstChild.style.width = width + 'px';
+					if(className.indexOf('geSprite-endclassic') == -1)
+						item.firstChild.firstChild.style.backgroundPosition = '36px -1695px';
+					else
+						item.firstChild.firstChild.style.backgroundPosition = '36px -1373px';
+					
 					item.firstChild.firstChild.appendChild(pat);
 					
 					return item;
 				});
-				addItem(menu, 50, 'solid', 'Includes', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], [null, null, 'includes']).setAttribute('title', mxResources.get('solid'));
-				addItem(menu, 50, 'dashed', 'Requires', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', null, 'requires']).setAttribute('title', mxResources.get('dashed'));
-				addItem(menu, 50, 'dotted', 'Extends', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'eshape'], ['1', '1 2', 'extends']).setAttribute('title', mxResources.get('dotted'));
+				addItem(menu, 50, 'solid', '', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, '', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', '');
+				addItem(menu, 50, 'solid', 'Includes', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, 'includes', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Includes');
+				addItem(menu, 50, 'dashed', 'Requires', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], ['1', null, 'requires', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Requires');
+				addItem(menu, 50, 'dotted', 'Extends', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], ['1', '1 2', 'extends', mxConstants.ARROW_CLASSIC, 1], 'geIcon geSprite geSprite-endclassic').setAttribute('title', 'Extends');
+				addItem(menu, 50, 'solid', 'Inherits', [mxConstants.STYLE_DASHED, mxConstants.STYLE_DASH_PATTERN, 'shape', mxConstants.STYLE_ENDARROW, 'endFill'], [null, null, '', mxConstants.ARROW_BLOCK, 0], 'geIcon geSprite geSprite-endblocktrans').setAttribute('title', 'Inherits');
+				// this.editorUi.menus.edgeStyleChange(menu, '', [mxConstants.STYLE_ENDARROW, 'endFill'], [mxConstants.ARROW_BLOCK, 0], 'geIcon geSprite geSprite-endblocktrans', null, false).setAttribute('title', mxResources.get('block'));
 			}));
 	
 			this.addDropDownArrow(this.edgeShapeMenu, 'geSprite-connection', 44, 50, 0, 0, 22, -4);
