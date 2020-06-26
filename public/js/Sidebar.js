@@ -768,6 +768,33 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	});
 
 	// EASY ELICITATION
+	function scrollIntoView(t) {
+		if (typeof(t) != 'object') return;
+	 
+		if (t.getRangeAt) {
+		   // we have a Selection object
+		   if (t.rangeCount == 0) return;
+		   t = t.getRangeAt(0);
+		}
+	 
+		if (t.cloneRange) {
+		   // we have a Range object
+		   var r = t.cloneRange();	// do not modify the source range
+		   r.collapse(true);		// collapse to start
+		   var t = r.startContainer;
+		   // if start is an element, then startOffset is the child number
+		   // in which the range starts
+		   if (t.nodeType == 1) t = t.childNodes[r.startOffset];
+		}
+	 
+		// if t is not an element node, then we need to skip back until we find the
+		// previous element with which we can call scrollIntoView()
+		o = t;
+		while (o && o.nodeType != 1) o = o.previousSibling;
+		t = o || t.parentNode;
+		if (t) t.scrollIntoView();
+	}
+
 	find = mxUtils.bind(this, function()
 	{
 		str = input.value;
@@ -777,6 +804,7 @@ Sidebar.prototype.addSearchPalette = function(expand)
 			// CODE FOR BROWSERS THAT SUPPORT window.find
 			var original_content = window;
 			strFound = original_content.find(str);
+			scrollIntoView(window.getSelection());
 			if (!strFound) {
 				strFound = original_content.find(str,0,1);
 				while (original_content.find(str,0,1)) continue;
