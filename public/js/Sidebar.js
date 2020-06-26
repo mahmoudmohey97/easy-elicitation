@@ -670,7 +670,7 @@ Sidebar.prototype.addSearchPalette = function(expand)
 	inner.style.cursor = 'default';
 
 	var input = document.createElement('input');
-	input.setAttribute('placeholder', mxResources.get('searchShapes'));
+	input.setAttribute('placeholder', 'Search for a keyword');
 	input.setAttribute('type', 'text');
 	input.style.fontSize = '12px';
 	input.style.overflow = 'hidden';
@@ -767,110 +767,132 @@ Sidebar.prototype.addSearchPalette = function(expand)
 		input.focus();
 	});
 
+	// EASY ELICITATION
 	find = mxUtils.bind(this, function()
 	{
-		// Shows 4 rows (minimum 4 results)
-		count = 4 * Math.max(1, Math.floor(this.container.clientWidth / (this.thumbWidth + 10)));
-		this.hideTooltip();
-		
-		if (input.value != '')
-		{
-			if (center.parentNode != null)
-			{
-				if (searchTerm != input.value)
-				{
-					clearDiv();
-					searchTerm = input.value;
-					hash = new Object();
-					complete = false;
-					page = 0;
-				}
-				
-				if (!active && !complete)
-				{
-					button.setAttribute('disabled', 'true');
-					button.style.display = '';
-					button.style.cursor = 'wait';
-					button.innerHTML = mxResources.get('loading') + '...';
-					active = true;
-					
-					// Ignores old results
-					var current = new Object();
-					this.currentSearch = current;
-					
-					this.searchEntries(searchTerm, count, page, mxUtils.bind(this, function(results, len, more, terms)
-					{
-						if (this.currentSearch == current)
-						{
-							results = (results != null) ? results : [];
-							active = false;
-							page++;
-							this.insertSearchHint(div, searchTerm, count, page, results, len, more, terms);
-							
-							// Allows to repeat the search
-							if (results.length == 0 && page == 1)
-							{
-								searchTerm = '';
-							}
-
-							if (center.parentNode != null)
-							{
-								center.parentNode.removeChild(center);
-							}
-							
-							for (var i = 0; i < results.length; i++)
-							{
-								try
-								{
-									var elt = results[i]();
-									
-									// Avoids duplicates in results
-									if (hash[elt.innerHTML] == null)
-									{
-										hash[elt.innerHTML] = '1';
-										div.appendChild(elt);
-									}
-								}
-								catch (e)
-								{
-									// ignore
-								}
-							}
-							
-							if (more)
-							{
-								button.removeAttribute('disabled');
-								button.innerHTML = mxResources.get('moreResults');
-							}
-							else
-							{
-								button.innerHTML = mxResources.get('reset');
-								button.style.display = 'none';
-								complete = true;
-							}
-							
-							button.style.cursor = '';
-							div.appendChild(center);
-						}
-					}), mxUtils.bind(this, function()
-					{
-						// TODO: Error handling
-						button.style.cursor = '';
-					}));
-				}
+		str = input.value;
+		if (parseInt(navigator.appVersion) < 4) return;
+		var strFound;
+		if (window.find) {
+			// CODE FOR BROWSERS THAT SUPPORT window.find
+			var original_content = window;
+			strFound = original_content.find(str);
+			if (!strFound) {
+				strFound = original_content.find(str,0,1);
+				while (original_content.find(str,0,1)) continue;
 			}
 		}
-		else
-		{
-			clearDiv();
-			input.value = '';
-			searchTerm = '';
-			hash = new Object();
-			button.style.display = 'none';
-			complete = false;
-			input.focus();
+		else {
+			alert ("Browser not supported.")
+			return;
 		}
+		if (!strFound) alert ("String '"+str+"' not found!")
+		return;
 	});
+	// find = mxUtils.bind(this, function()
+	// {
+	// 	// Shows 4 rows (minimum 4 results)
+	// 	count = 4 * Math.max(1, Math.floor(this.container.clientWidth / (this.thumbWidth + 10)));
+	// 	this.hideTooltip();
+		
+	// 	if (input.value != '')
+	// 	{
+	// 		if (center.parentNode != null)
+	// 		{
+	// 			if (searchTerm != input.value)
+	// 			{
+	// 				clearDiv();
+	// 				searchTerm = input.value;
+	// 				hash = new Object();
+	// 				complete = false;
+	// 				page = 0;
+	// 			}
+				
+	// 			if (!active && !complete)
+	// 			{
+	// 				button.setAttribute('disabled', 'true');
+	// 				button.style.display = '';
+	// 				button.style.cursor = 'wait';
+	// 				button.innerHTML = mxResources.get('loading') + '...';
+	// 				active = true;
+					
+	// 				// Ignores old results
+	// 				var current = new Object();
+	// 				this.currentSearch = current;
+					
+	// 				this.searchEntries(searchTerm, count, page, mxUtils.bind(this, function(results, len, more, terms)
+	// 				{
+	// 					if (this.currentSearch == current)
+	// 					{
+	// 						results = (results != null) ? results : [];
+	// 						active = false;
+	// 						page++;
+	// 						this.insertSearchHint(div, searchTerm, count, page, results, len, more, terms);
+							
+	// 						// Allows to repeat the search
+	// 						if (results.length == 0 && page == 1)
+	// 						{
+	// 							searchTerm = '';
+	// 						}
+
+	// 						if (center.parentNode != null)
+	// 						{
+	// 							center.parentNode.removeChild(center);
+	// 						}
+							
+	// 						for (var i = 0; i < results.length; i++)
+	// 						{
+	// 							try
+	// 							{
+	// 								var elt = results[i]();
+									
+	// 								// Avoids duplicates in results
+	// 								if (hash[elt.innerHTML] == null)
+	// 								{
+	// 									hash[elt.innerHTML] = '1';
+	// 									div.appendChild(elt);
+	// 								}
+	// 							}
+	// 							catch (e)
+	// 							{
+	// 								// ignore
+	// 							}
+	// 						}
+							
+	// 						if (more)
+	// 						{
+	// 							button.removeAttribute('disabled');
+	// 							button.innerHTML = mxResources.get('moreResults');
+	// 						}
+	// 						else
+	// 						{
+	// 							button.innerHTML = mxResources.get('reset');
+	// 							button.style.display = 'none';
+	// 							complete = true;
+	// 						}
+							
+	// 						button.style.cursor = '';
+	// 						div.appendChild(center);
+	// 					}
+	// 				}), mxUtils.bind(this, function()
+	// 				{
+	// 					// TODO: Error handling
+	// 					button.style.cursor = '';
+	// 				}));
+	// 			}
+	// 		}
+	// 	}
+	// 	else
+	// 	{
+	// 		clearDiv();
+	// 		input.value = '';
+	// 		searchTerm = '';
+	// 		hash = new Object();
+	// 		button.style.display = 'none';
+	// 		complete = false;
+	// 		input.focus();
+	// 	}
+	// });
 	
 	mxEvent.addListener(input, 'keydown', mxUtils.bind(this, function(evt)
 	{

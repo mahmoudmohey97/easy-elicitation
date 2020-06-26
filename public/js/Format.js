@@ -1678,16 +1678,16 @@ ArrangePanel.prototype.addGroupOps = function(div)
 			mxUtils.br(div);
 		}
 		
-		btn = mxUtils.button(mxResources.get('editData'), mxUtils.bind(this, function(evt)
-		{
-			this.editorUi.actions.get('editData').funct();
-		}));
+		// btn = mxUtils.button(mxResources.get('editData'), mxUtils.bind(this, function(evt)
+		// {
+		// 	this.editorUi.actions.get('editData').funct();
+		// }));
 		
-		btn.setAttribute('title', mxResources.get('editData') + ' (' + this.editorUi.actions.get('editData').shortcut + ')');
-		btn.style.width = '100px';
-		btn.style.marginBottom = '2px';
-		div.appendChild(btn);
-		count++;
+		// btn.setAttribute('title', mxResources.get('editData') + ' (' + this.editorUi.actions.get('editData').shortcut + ')');
+		// btn.style.width = '100px';
+		// btn.style.marginBottom = '2px';
+		// div.appendChild(btn);
+		// count++;
 
 		btn = mxUtils.button(mxResources.get('editLink'), mxUtils.bind(this, function(evt)
 		{
@@ -1695,8 +1695,8 @@ ArrangePanel.prototype.addGroupOps = function(div)
 		}));
 		
 		btn.setAttribute('title', mxResources.get('editLink'));
-		btn.style.width = '100px';
-		btn.style.marginLeft = '2px';
+		btn.style.width = '202px';
+		// btn.style.marginLeft = '2px';
 		btn.style.marginBottom = '2px';
 		div.appendChild(btn);
 		count++;
