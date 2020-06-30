@@ -1,10 +1,9 @@
 var projectModel = require("../models/project");
+var clientModel = require("../models/client");
 
 module.exports.home = async function (req, res) {
-    req.session.cid = 3;
-    req.session.user = 'Meho';
     if (!req.session.cid) {
-        res.render('errors/404');
+        res.redirect("/clientloginpage");
     }
     else {
         var results = await projectModel.getClientProjects(req);
@@ -16,4 +15,17 @@ module.exports.home = async function (req, res) {
         res.render('client/home', { data: results });
     }
 };
+
+exports.clientLogin = function (req, res) {
+    clientModel.login(req, res);
+};
+exports.sendResetPasswordEmail = function (req, res) {
+    clientModel.forgetPassword(req, res)
+}
+exports.resetPassword = function (req, res) {
+    clientModel.resetPassword(req, res)
+}
+exports.editPassword = function (req, res) {
+    clientModel.editPassword(req, res)
+}
 

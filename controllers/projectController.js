@@ -36,7 +36,7 @@ module.exports.projectHome = async function (req, res) {
         });
     }
     else {
-        res.render('erros/404')
+        res.redirect("/")
     }
 };
 
@@ -75,18 +75,16 @@ module.exports.handleClientInvitationLink = async function (req, res) {
                 res.redirect(`http://localhost:3000/project?pid=${req.query.pid}`)
             }
             else {
-                res.render('invitation expired');
+                res.render('errors/404');
             }
         }
         else {
-            console.log('u are not authorized :) ');
+            res.send(403);
         }
 
     }
     else {
-        // el awl Login
-        // redirect 3la el funtion de
-        res.render("errors/404")
+        res.redirect("/")
     }
 }
 

@@ -1,0 +1,17 @@
+.mycard{
+  margin-top: 150px;
+}
+.auth-card{
+  padding: 30px;
+  text-align: center;
+  max-width: 750px;
+  margin: 10px auto;
+}
+.loginbutton{
+  margin : 15px auto;
+}
+
+.buttons{
+margin: 0px 35%;
+margin-top: 100px;
+}
