@@ -2,10 +2,8 @@ var projectModel = require("../models/project");
 var businessAnalystModel = require("../models/businessAnalyst");
 
 module.exports.home = async function (req, res) {
-	req.session.baid = 4;
-	req.session.user = 'Ali';
 	if (!req.session.baid) {
-		res.render('errors/404');
+		res.redirect("/BAloginpage");
 	}
 	else {
 		var result1 = await projectModel.getProjectsCreatedByBA(req);
@@ -44,4 +42,18 @@ module.exports.getBAsInMyCompany = async function (req, res) {
 		res.send(emails);
 	}
 
+}
+
+exports.businessLogin = function (req, res) {
+    businessAnalystModel.login(req, res);
+};
+exports.sendResetPasswordEmail = function(req,res){
+    businessAnalystModel.forgetPassword(req,res)
+}
+exports.resetPassword = function(req,res){
+    businessAnalystModel.resetPassword(req,res)
+}
+exports.editPassword = function(req,res)
+{
+    businessAnalystModel.editPassword(req,res)
 }

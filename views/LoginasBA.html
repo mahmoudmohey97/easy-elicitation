@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <!--Import Google Icon Font-->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <!-- Compiled and minified CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <!-- Compiled and minified JavaScript -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!--Let browser know website is optimized for mobile-->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="/css/css.css">
+  <script>  // this script is to check the user existance in db update
+    function validateLoginForm(form, event) {
+      event.preventDefault();
+      console.log("hss")
+      var result = true;
+      if (document.getElementById("emailerror").innerHTML != "") {
+        document.getElementById("emailerror").innerHTML = "";
+        form.email.style.borderColor = "black";
+      }
+      if (document.getElementById("passworderror").innerHTML != "") {
+        document.getElementById("passworderror").innerHTML = "";
+        form.password.style.borderColor = "black";
+      }
+      if (form.email.value == "") {
+        form.email.focus();
+        form.email.style.borderColor = "red";
+        document.getElementById("emailerror").innerHTML = "please enter email";
+        document.getElementById("emailerror").style.color = "red";
+        result = false;
+      }
+      if (form.password.value == "") {
+        form.password.focus();
+        form.password.style.borderColor = "red";
+        document.getElementById("passworderror").innerHTML = "please enter password";
+        document.getElementById("passworderror").style.color = "red";
+        result = false;
+      }
+      if (!result) {
+        return result;
+      }
+      var xhttp = new XMLHttpRequest();
+      xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+          console.log(this.responseText)
+          if (this.responseText !== "successfully loggedin") {
+            alert("Invalid email or password")
+          }
+          else {
+            document.location = "/ba";
+          }
+        }
+      };
+
+      xhttp.open("POST", "http://localhost:3000/businesslogin", true);
+      xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+      xhttp.send("email=" + form.email.value + "&password=" + form.password.value);
+      return true;
+    }
+
+
+
+
+
+  </script>
+</head>
+
+<body>
+
+  <div class="mycard">
+    <div class="card auth-card input-field">
+      <h2>Easy Elicitation</h2>
+      <h5>welcome Bussiness Analyst</h5>
+      <form onsubmit="return validateLoginForm(this,event)">
+        <input type="text" placeholder="email" name="email" id="email"/>
+        <div id="emailerror"></div>
+        <input type="password" placeholder="password" name="password" id="password"/>
+        <a href="/forgotpassword?type=BA">Forgot Password?</a>
+        <div id="passworderror">
+        </div>
+        <button class="btn waves-effect waves-light #42a5f5 blue darken-1 loginbutton #424242 grey darken-3">
+          Login
+        </button>
+      </form>
+    </div>
+  </div>
+
+</body>
+
+</html>

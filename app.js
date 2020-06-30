@@ -3,6 +3,11 @@ var router = require('./routes');
 const express = require('express');
 const fileUpload = require('express-fileupload');
 const session = require('express-session')({
+    cookie: {
+        path    : '/',
+        httpOnly: true,
+        maxAge  : 24*60*60*1000
+      },
     cookieName: 'session',
     secret: "$0_$3cR37_K3Y",
     resave: true,
@@ -28,6 +33,8 @@ app.use(fileUpload());
 
 // View Engine..  Extension
 app.set('view engine', 'ejs');
+app.use('/css',express.static(__dirname +'/css'));
+
 // Routes Handler
 app.use('/',router); 
 
