@@ -93,7 +93,7 @@ module.exports.forgetPassword = function (req, res) {
 								console.log("send email")
 								var emailsubject = "please reset your password"
 								var emailtext = "Please use the following link to reset your password \n"
-									+ "http://localhost:3000/resetpassword/" + token + "?email=" + email + "&type=client"
+									+ req.protocol + '://' + req.get('host') + "/resetpassword/" + token + "?email=" + email + "&type=client"
 								sendemail.sendToNewAdmin(email, emailsubject, emailtext)
 								res.send("please check your email to reset password")
 							}

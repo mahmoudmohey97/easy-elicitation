@@ -53,7 +53,7 @@
         }
       };
 
-      xhttp.open("POST", "http://localhost:3000/clientlogin", true);
+      xhttp.open("POST", window.location.origin + "/clientlogin", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
       xhttp.send("email=" + form.email.value + "&password=" + form.password.value);
       return true;

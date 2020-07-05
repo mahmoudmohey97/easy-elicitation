@@ -1,5 +1,5 @@
 // socket = io.connect('https://easy-elicitation.herokuapp.com?room=' + urlParams['room']');
-socket = io.connect('http://localhost:3000?room=' + urlParams['room']);
+socket = io.connect(window.location.origin + '?room=' + urlParams['room']);
 var changing = false;
 
 socket.on('savedRoomData', function(data) {

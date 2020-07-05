@@ -35,8 +35,13 @@ app.use(fileUpload());
 app.set('view engine', 'ejs');
 app.use('/css',express.static(__dirname +'/css'));
 
+app.use ((req, res, next) => {
+  res.locals.url = req.protocol + '://' + req.get('host');
+  next();
+});
+
 // Routes Handler
-app.use('/',router); 
+app.use('/', router); 
 
 //static files
 app.use(express.static('./public'));
@@ -50,5 +55,5 @@ app.use(function (req, res, next) {
 });
 
 // app.listen(3000);
-server.listen(3000);
-console.log(`Running on ${3000}`);
+server.listen(80);
+console.log(`Running on ${80}`);

@@ -141,7 +141,7 @@
                                 %>
                             <div class="d-flex flex-row comment-row m-t-0">
                                 <div class="comment-text active">
-                                    <a href='http://localhost:3000/getDiagram/<%= diagrams[i].diagramId %>'><h6 class="font-20 font-medium"><%= diagrams[i].name %></h6></a>
+                                    <a href='<%=url%>/getDiagram/<%= diagrams[i].diagramId %>'><h6 class="font-20 font-medium"><%= diagrams[i].name %></h6></a>
                                     <span class="m-b-15 d-block"> <% for(var j = 0; j < count.length; ++j){
                                         %>
                                             <%= count[j] %>
