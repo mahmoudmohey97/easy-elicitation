@@ -45,7 +45,7 @@ module.exports.inviteClient = async function (req, res) {
         var result = await model.getProjectByBaAndName(req.session.baid, req.query.name);
         var encryptedMail = encryptModel.encrypt(req.query.mail);
         mail = encryptedMail;
-        var link = "http://localhost:3000/clientInvitation?pid=" + result[0].projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + mail;
+        var link = req.protocol + '://' + req.get('host') + "/clientInvitation?pid=" + result[0].projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + mail;
         sendMailModel.invite(req.query.mail, req.query.name, link);
         res.send(200)
     }
@@ -53,7 +53,7 @@ module.exports.inviteClient = async function (req, res) {
         var project = await model.getProjectById(req.query.pid);
         var encryptedMail = encryptModel.encrypt(req.query.mail);
         mail = encryptedMail;
-        var link = "http://localhost:3000/clientInvitation?pid=" + req.query.pid + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + mail;
+        var link = req.protocol + '://' + req.get('host') + "/clientInvitation?pid=" + req.query.pid + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + mail;
         sendMailModel.invite(req.query.mail, project.name, link);
         res.send(200)
     }
@@ -74,7 +74,7 @@ module.exports.handleClientInvitationLink = async function (req, res) {
             var time = req.query.dt;
             if (parseInt(Date.now() / 1000) <= parseInt(time) + 2 * 60) {
                 var result = model.clientInvitation(req.session.cid, req.query.pid);
-                res.redirect(`http://localhost:3000/project?pid=${req.query.pid}`)
+                res.redirect(`/project?pid=${req.query.pid}`)
             }
             else {
                 res.render('errors/404'); // expired
@@ -99,7 +99,7 @@ module.exports.inviteBA = async function (req, res) {
         var project = await model.getProjectById(projectId);
         var encryptedMail = encryptModel.encrypt(mail);
         encryptedMail = encryptedMail;
-        var link = "http://localhost:3000/baInvitation?pid=" + projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + encryptedMail;
+        var link = req.protocol + '://' + req.get('host') + "/baInvitation?pid=" + projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + encryptedMail;
         sendMailModel.invite(mail, project.name, link);
         res.send();
     }
@@ -107,7 +107,7 @@ module.exports.inviteBA = async function (req, res) {
         var result = await model.getProjectByBaAndName(req.session.baid, name);
         var encryptedMail = encryptModel.encrypt(mail);
         encryptedMail = encryptedMail;
-        var link = "http://localhost:3000/baInvitation?pid=" + result[0].projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + encryptedMail;
+        var link = req.protocol + '://' + req.get('host') + "/baInvitation?pid=" + result[0].projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + encryptedMail;
         sendMailModel.invite(mail, name, link);
         res.send();
     }
@@ -127,7 +127,7 @@ module.exports.handleBAInvitationLink = async function (req, res) {
             var time = req.query.dt;
             if (parseInt(Date.now() / 1000) <= parseInt(time) + 2 * 60) {
                 await model.businessAnalystInvitation(req.session.baid, req.query.pid);
-                res.redirect(`http://localhost:3000/project?pid=${req.query.pid}`)
+                res.redirect(`/project?pid=${req.query.pid}`)
             }
             else {
                 res.render('errors/404'); // expired
