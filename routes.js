@@ -71,7 +71,11 @@ router.get('/BAloginpage', function (req, res) {
 router.post('/clientlogin', clientController.clientLogin);
 router.post('/businesslogin', businessAnalystController.businessLogin);
 
-
+router.get("/logout", function (req, res) {
+    req.session.destroy((err) => {
+        res.redirect('/')
+    })
+});
 
 router.get('/forgotpassword', function (req, res) {
     res.render('forgotpasswordpage', { type: req.query.type })

@@ -11,8 +11,8 @@ const path = require('path');
 
 module.exports.projectHome = async function (req, res) {
 
-    if (req.session.baid || req.session.cid) {
-        
+    if ((req.session.baid || req.session.cid) && req.query.pid) {
+
         var project = await model.getProjectById(req.query.pid);
         var baParticipants = await model.getProjectBa(req.query.pid);
         // console.log(baParticipants);
@@ -49,7 +49,7 @@ module.exports.inviteClient = async function (req, res) {
         sendMailModel.invite(req.query.mail, req.query.name, link);
         res.send(200)
     }
-    else {
+    else if (req.query.pid) {
         var project = await model.getProjectById(req.query.pid);
         var encryptedMail = encryptModel.encrypt(req.query.mail);
         mail = encryptedMail;
@@ -57,10 +57,12 @@ module.exports.inviteClient = async function (req, res) {
         sendMailModel.invite(req.query.mail, project.name, link);
         res.send(200)
     }
+    else {
+        res.redirect("/")
+    }
 }
 
 module.exports.handleClientInvitationLink = async function (req, res) {
-    req.session.cid = 3;
     if (req.session.cid) {
         var urlMail = req.query.to;
         var currentUserMail = '';
@@ -75,15 +77,16 @@ module.exports.handleClientInvitationLink = async function (req, res) {
                 res.redirect(`http://localhost:3000/project?pid=${req.query.pid}`)
             }
             else {
-                res.render('errors/404');
+                res.render('errors/404'); // expired
             }
         }
         else {
-            res.send(403);
+            res.sendStatus(403);
         }
 
     }
     else {
+        // req.session.fromUrl = 
         res.redirect("/")
     }
 }
@@ -92,7 +95,7 @@ module.exports.inviteBA = async function (req, res) {
     mail = req.body['data[]'];
     name = req.body['name'];
     projectId = req.body['projectId'];
-    if (!name) {
+    if (req.session.baid && !name) {
         var project = await model.getProjectById(projectId);
         var encryptedMail = encryptModel.encrypt(mail);
         encryptedMail = encryptedMail;
@@ -100,20 +103,19 @@ module.exports.inviteBA = async function (req, res) {
         sendMailModel.invite(mail, project.name, link);
         res.send();
     }
-    else {
+    else if (req.session.baid && name) {
         var result = await model.getProjectByBaAndName(req.session.baid, name);
         var encryptedMail = encryptModel.encrypt(mail);
         encryptedMail = encryptedMail;
         var link = "http://localhost:3000/baInvitation?pid=" + result[0].projectId + "&dt=" + parseInt(Date.now() / 1000) + "&to=" + encryptedMail;
         sendMailModel.invite(mail, name, link);
         res.send();
-
     }
-
+    else
+        res.redirect('/')
 }
 
 module.exports.handleBAInvitationLink = async function (req, res) {
-    req.session.baid = 4;
     if (req.session.baid) {
         var urlMail = req.query.to;
         var currentUserMail = '';
@@ -128,17 +130,17 @@ module.exports.handleBAInvitationLink = async function (req, res) {
                 res.redirect(`http://localhost:3000/project?pid=${req.query.pid}`)
             }
             else {
-                console.log('invitation expired');
+                res.render('errors/404'); // expired
             }
         }
         else {
-            console.log('u are not authorized :) ');
+            res.sendStatus(403);
         }
     }
     else {
         // el awl Login
         // redirect 3la el funtion de
-        res.render("errors/404")
+        res.render("/")
     }
 }
 
@@ -176,7 +178,7 @@ module.exports.uploadFile = async function (req, res) {
 
 module.exports.getBAsNotInProject = async function (req, res) {
     if (!req.session.baid) {
-        res.render('errors/404');
+        res.redirect('/');
     }
     else {
         var result = await model.getProjectOwner(req.get('projectId'));
@@ -194,7 +196,6 @@ module.exports.getBAsNotInProject = async function (req, res) {
 }
 
 module.exports.leaveProject = async function (req, res) {
-    console.log(req.query.pid);
     if (req.session.baid) {
         await model.leaveProject(req, req.query.pid);
         res.redirect('/ba');
@@ -205,7 +206,8 @@ module.exports.leaveProject = async function (req, res) {
     }
     else {
         //login
-        console("u must login");
+        res.redirect('/')
+        // console("u must login");
     }
 }
 
