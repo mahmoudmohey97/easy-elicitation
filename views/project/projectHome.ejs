@@ -149,7 +149,8 @@
                                         <% } %>
                                          </span>
                                     <div class="comment-footer">
-                                        <span class="label label-rounded label-primary">Pending</span>
+                                        <!-- <span class="label label-rounded label-primary">Pending</span> -->
+                                        <span class="label <%= diagrams[i].approval === 0 ? 'label-info' : 'label-success '%> label-rounded"><%= diagrams[i].approval === 0 ? 'Pending ' : 'Approved '%></span>
                                         <span class="action-icons active" onClick="event.stopPropagation()">
                                             <% if(auth){
                                             %>
