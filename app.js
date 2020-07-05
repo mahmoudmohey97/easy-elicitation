@@ -35,6 +35,7 @@ app.use(fileUpload());
 app.set('view engine', 'ejs');
 app.use('/css',express.static(__dirname +'/css'));
 
+app.enable('trust proxy');
 app.use ((req, res, next) => {
   res.locals.url = req.protocol + '://' + req.get('host');
   next();
