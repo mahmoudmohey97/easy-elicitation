@@ -1,4 +1,5 @@
 const diagram = require('../models/diagram');
+const project = require('../models/project');
 module.exports.colaborate = function(io) {
     // rooms = {};
     onlineUsers = {};
@@ -37,6 +38,9 @@ module.exports.colaborate = function(io) {
             socket.to(room).emit('changes', data);
             socket.emit('changes', {username: username});
             await diagram.saveDiagram(room, data['xml']);
+            await diagram.revokeApprovals(room);
+            await diagram.checkApproval(room);
+            await project.checkApproval(room);
         });
     
         // On disconnection

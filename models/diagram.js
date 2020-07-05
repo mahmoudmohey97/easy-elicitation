@@ -131,3 +131,32 @@ module.exports.cRevokeApprove = async function (did, cid) {
 	const output = await query(sql);
 	return output;
 };
+
+module.exports.revokeApprovals = async function (did) {
+	let sql = "delete from approvals where did=?"
+	let inserts = [did];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+};
+
+module.exports.checkApproval = async function (did) {
+	let sql = "select count(*) as appCount from approvals where did=?"
+	let inserts = [did];
+	sql = con.format(sql, inserts);
+	const countApprovals = await query(sql);
+	sql = "select * from (select count(businessAnalystId) as businessAnalysts \
+	from businessanalystparticipant \
+	WHERE businessanalystparticipant.projectId in (select projectId from diagram where diagramId = ?)) as a,\
+	(select count(clientId) as clients from clientparticipant WHERE clientparticipant.projectId in (select projectId from diagram where diagramId = ?)) as b";
+	inserts = [did, did];
+	sql = con.format(sql, inserts);
+	const participants = await query(sql);
+	const countParticipants = participants[0].businessAnalysts + participants[0].clients + 1;
+	const approval = (countApprovals[0].appCount == countParticipants) ? 1 : 0;
+	sql = "update diagram set approval = ? where diagramId = ?";
+	inserts = [approval, did];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+}

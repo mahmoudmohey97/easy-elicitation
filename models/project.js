@@ -224,3 +224,20 @@ module.exports.deleteProject = async function (pid) {
 	const output = await query(sql);
 	return output;
 }
+
+module.exports.checkApproval = async function (did) {
+	let sql = "select count(*) as dC from diagram where projectId in (select projectId from diagram where diagramId = ?)"
+	let inserts = [did];
+	sql = con.format(sql, inserts);
+	const diagramsCount = await query(sql);
+	sql = "select count(*) as dAC from diagram where projectId in (select projectId from diagram where diagramId = ?) and approval = 1";
+	inserts = [did];
+	sql = con.format(sql, inserts);
+	const diagramsApprovalCount = await query(sql);
+	const approval = (diagramsCount[0].dC == diagramsApprovalCount[0].dAC) ? 1 : 0;
+	sql = "update project set approval = ? where projectId in (select projectId from diagram where diagramId = ?)";
+	inserts = [approval, did];
+	sql = con.format(sql, inserts);
+	const output = await query(sql);
+	return output;
+}

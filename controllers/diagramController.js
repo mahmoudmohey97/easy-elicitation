@@ -1,4 +1,5 @@
 const model = require('../models/diagram');
+const projectModel = require('../models/project');
 
 module.exports.deleteDiagram = async function (req, res) {
     await model.deleteDiagram(req.query.did);
@@ -46,10 +47,14 @@ module.exports.createDiagram = async function (req, res) {
 
 module.exports.approveDiagram = async function (req, res) {
     if (req.session.cid) {
-        model.cApprove(req.query.did, req.session.cid);
+        await model.cApprove(req.query.did, req.session.cid);
+        await model.checkApproval(req.query.did);
+        await projectModel.checkApproval(req.query.did);
     }
     else if (req.session.baid) {
-        model.baApprove(req.query.did, req.session.baid);
+        await model.baApprove(req.query.did, req.session.baid);
+        await model.checkApproval(req.query.did);
+        await projectModel.checkApproval(req.query.did);
     }
     else {
         res.send(400);
@@ -60,10 +65,14 @@ module.exports.approveDiagram = async function (req, res) {
 
 module.exports.revokeApproveDiagram = async function (req, res) {
     if (req.session.cid) {
-        model.cRevokeApprove(req.query.did, req.session.cid);
+        await model.cRevokeApprove(req.query.did, req.session.cid);
+        await model.checkApproval(req.query.did);
+        await projectModel.checkApproval(req.query.did);
     }
     else if (req.session.baid) {
-        model.baRevokeApprove(req.query.did, req.session.baid);
+        await model.baRevokeApprove(req.query.did, req.session.baid);
+        await model.checkApproval(req.query.did);
+        await projectModel.checkApproval(req.query.did);
     }
     else {
         res.send(400);
