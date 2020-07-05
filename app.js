@@ -55,5 +55,5 @@ app.use(function (req, res, next) {
 });
 
 // app.listen(3000);
-server.listen(80);
-console.log(`Running on ${80}`);
+server.listen(process.env.PORT || 3000);
+console.log(`Running on ${process.env.PORT || 3000}`);
