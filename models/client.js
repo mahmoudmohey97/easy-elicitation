@@ -43,33 +43,17 @@ module.exports.updateTokenAndExpireTokenOfClient = async function(token,expireto
 	const output = await query(sql);
 	return output;
 }
-module.exports.forgetPassword = function (req, res) {
-	con.query("select * from client where email = \'" + req.query.email + "\'", function (err, result, field) {
-		if (err) throw err;
-		else if (result.length == 0) {
-			res.send("user not found")
-		}
-		else {
-			crypto.randomBytes(32, (err, buffer) => {
-				if (err) console.log(err)
-				else {
-					const token = buffer.toString("hex")
-					var email = req.query.email
-					var expireToken = Date.now() + 3600000
-					con.query("update client set resetPasswordToken = \'"
-						+ token + "\',expireToken = \'" + expireToken + "\' where email = \'" + email +
-						"\'", function (err, result, field) {
-							if (err) throw err
-							else {
-								var emailsubject = "please reset your password"
-								var emailtext = "Please use the following link to reset your password \n"
-									+ req.protocol + '://' + req.get('host') + "/resetpassword/" + token + "?email=" + email + "&type=client"
-								sendemail.sendToNewAdmin(email, emailsubject, emailtext)
-								res.redirect('/')
-							}
-						})
-				}
-			});
-		}
-	});
+module.exports.insertNewClient = async function(name,email,hashedpassword){
+	let sql = "INSERT INTO client (name,email,password) VALUES (?,?,?) ";
+        let inserts = [name, email, hashedpassword]
+        sql = db.format(sql, inserts);
+        const output = await query(sql);
+        return output;
+}
+module.exports.editPassword = async function (hashedpassword, email) {
+	let sql = "update client set password = ? where email = ? "
+	let inserts = [hashedpassword, email]
+	sql = db.format(sql, inserts);
+	const output = await query(sql);
+	return output;
 }

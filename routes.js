@@ -106,6 +106,9 @@ router.post('/resetpassword', function (req, res) {
         clientController.resetPassword(req, res)
     }
 })
+router.post('/insertnewclient', clientController.insertNewClient);
+router.post('/clienteditpassword', clientController.editpassword);
+router.post('/baeditpassword', businessAnalystController.editpassword);
 
 
 module.exports = router;
