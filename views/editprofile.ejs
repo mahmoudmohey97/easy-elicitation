@@ -1,0 +1,111 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <title>Edit Profile</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="/css/css.css">
+    <script>
+        function validateLoginForm(form, event) {
+            event.preventDefault();
+            var result = true;
+            if (document.getElementById("oldpassworderror").innerHTML != "") {
+                document.getElementById("oldpassworderror").innerHTML = "";
+                form.oldpassword.style.borderColor = "black";
+            }
+            if (document.getElementById("newpassworderror").innerHTML != "") {
+                document.getElementById("newpassworderror").innerHTML = "";
+                form.newpassword.style.borderColor = "black";
+            }
+            if (document.getElementById("confirmpassworderror").innerHTML != "") {
+                document.getElementById("confirmpassworderror").innerHTML = "";
+                form.confirm.style.borderColor = "black";
+            }
+            if (document.getElementById("nameerror").innerHTML != "") {
+                document.getElementById("nameerror").innerHTML = "";
+                form.name.style.borderColor = "black";
+            }
+            if (!(form.oldpassword.value == "" && form.newpassword.value == "" && form.confirm.value == "")) {
+                if (form.oldpassword.value == "") {
+                    form.oldpassword.focus();
+                    form.oldpassword.style.borderColor = "red";
+                    document.getElementById("oldpassworderror").innerHTML = "please enter your old password";
+                    document.getElementById("oldpassworderror").style.color = "red";
+                    result = false;
+                }
+                if (form.newpassword.value == "") {
+                    form.newpassword.focus();
+                    form.newpassword.style.borderColor = "red";
+                    document.getElementById("newpassworderror").innerHTML = "please enter new password";
+                    document.getElementById("newpassworderror").style.color = "red";
+                    result = false;
+                }
+                if (form.confirm.value == "") {
+                    form.confirm.focus();
+                    form.confirm.style.borderColor = "red";
+                    document.getElementById("confirmpassworderror").innerHTML = "please confirm new password";
+                    document.getElementById("confirmpassworderror").style.color = "red";
+                    result = false;
+                }
+                if (form.confirm.value !== form.newpassword.value) {
+                    alert("new password and confirm password doesn't match")
+                    result = false;
+                }
+            }
+            if (!result) {
+                return result;
+            }
+            check(form)
+        }
+        function check(form) {
+            var xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = function () {
+                if (this.readyState == 4 && this.status == 200) {
+                    if (this.responseText !== "ok") {
+                        document.getElementById("oldpassworderror").innerHTML = this.responseText.toString()
+                        document.getElementById("oldpassworderror").style.color = "red";
+                        form.oldpassword.style.borderColor = "red";
+                    }
+                    else {
+                        alert("successfully changed profile")
+                        document.location = '/'
+                    }
+                }
+            };
+            xhttp.open("POST", "http://localhost:3000/editprofile", true);
+            xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            xhttp.send("oldpassword=" + form.oldpassword.value + "&newpassword=" + form.newpassword.value + "&type=" + form.type.value + "&name=" + form.name.value);
+        }
+    </script>
+</head>
+
+<body>
+    <div class="mycard">
+        <div class="card auth-card input-field">
+            <h2>Hello <%= name %></h2>
+            <h5>Edit Profile</h5>
+            <form method="POST" action="" name="loginform" onsubmit="return validateLoginForm(this,event)">
+                <input type="text" name="name" id="name" value=<%= name %>>
+                <div name="nameerror" id="nameerror"></div>
+                <input type="password" name="oldpassword" id="oldpassword" placeholder="Enter old password">
+                <div name="oldpassworderror" id="oldpassworderror"></div>
+                <input type="password" name="newpassword" id="newpassword" placeholder="Enter new password">
+                <div name="newpassworderror" id="newpassworderror"></div>
+                <input type="password" name="confirm" id="confirm" placeholder="Confirm new password">
+                <input type="hidden" name="type" id="type" value=<%= type %>>
+                <div name="confirmpassworderror" id="confirmpassworderror"></div>
+                <button class="btn waves-effect waves-light #42a5f5 blue darken-1 loginbutton #424242 grey darken-3">
+                    Edit Profile
+                </button>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>

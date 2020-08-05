@@ -43,7 +43,9 @@ module.exports.getBAByEmailAndToken = async function(email,token){
 	let inserts = [email,token];
 	sql = con.format(sql, inserts);
 	const output = await query(sql);
-	return output;
+	if (output.length === 1)
+		return output[0];
+	return null;
 }
 module.exports.updateBAPassword = async function(hashedpassword,email){
 	let sql = "update businessanalyst set password = ? , resetPasswordToken = null , expireToken = null where email = ? ";
@@ -59,10 +61,10 @@ module.exports.updateBATokenAndExpireToken = async function(token,expireToken,em
 	const output = await query(sql);
 	return output;
 }
-module.exports.editPassword = async function (hashedpassword, email) {
-	let sql = "update businessanalyst set password = ? where email = ? "
-	let inserts = [hashedpassword, email]
-	sql = db.format(sql, inserts);
+module.exports.editprofile = async function (hashedpassword, email,name) {
+	let sql = "update businessanalyst set password = ? , name = ? where email = ? "
+	let inserts = [hashedpassword,name, email]
+	sql = con.format(sql, inserts);
 	const output = await query(sql);
 	return output;
 }

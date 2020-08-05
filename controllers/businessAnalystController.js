@@ -97,25 +97,32 @@ exports.resetPassword = async function (req, res) {
 	var email = req.body.email
 	var token = req.body.token
 	var result = await businessAnalystModel.getBAByEmailAndToken(email.token)
-	var expireToken = result[0].expireToken;
+	var expireToken = result.expireToken;
 	if (parseInt(expireToken) >= parseInt(Date.now().toString())) {
 		var hashedpassword = await bcrypt.hash(newpassword, 12)
 		var updateresult = await businessAnalystModel.updateBAPassword(hashedpassword, email)
 		res.redirect('/')
 	}
+	res.send("token expired")
 }
-module.exports.editpassword = async function (req, res) {
+module.exports.editprofile = async function (req, res) {
+    var hashedpassword;
     var result = await businessAnalystModel.getBAByEmail(req.session.email)
     if (result.length == 0) {
         res.send("user not found")
     }
-    var match = await bcrypt.compare(req.body.oldpassword, result[0].password)
-    if (!match) {
-        res.send("wrong old password")
+    if (req.body.oldpassword == "" && req.body.newpassword == "") {
+        hashedpassword = result[0].password
     }
     else {
-        var hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
-        var result = await businessAnalystModel.editPassowrd(hashedpassword, req.session.email)
-        res.send("ok")
+        var match = await bcrypt.compare(req.body.oldpassword, result[0].password)
+        if (!match) {
+            res.send("wrong old password")
+            return;
+        }
+        hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
     }
+    var result = await businessAnalystModel.editprofile(hashedpassword, req.session.email, req.body.name)
+    req.session.user = req.body.name
+    res.send("ok")
 }

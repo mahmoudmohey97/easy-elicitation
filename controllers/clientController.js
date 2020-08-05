@@ -3,6 +3,7 @@ var clientModel = require("../models/client");
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 var sendemail = require('../sendmail')
+var generator = require('generate-password');
 
 module.exports.home = async function (req, res) {
     if (!req.session.cid) {
@@ -78,8 +79,8 @@ module.exports.resetPassword = async function (req, res) {
     }
 }
 module.exports.insertNewClient = async function (req, res) {
-    var name = req.body.name;
-    var email = req.body.email;
+    var name = "guest"
+    var email = req.query.mail;
     //generates password for the new admin
     var password = generator.generate({
         length: 10,
@@ -91,20 +92,27 @@ module.exports.insertNewClient = async function (req, res) {
         + name + "\n your password is: " + password + "\n You can change the password anytime from your account \n"
     sendemail.sendToNewAdmin(email, "Easy Elicitation Client Account", emailtext)
 };
-module.exports.editpassword = async function (req, res) {
+
+module.exports.editprofile = async function (req, res) {
+    var hashedpassword;
     var result = await clientModel.getClientByEmail(req.session.email)
     if (result.length == 0) {
         res.send("user not found")
     }
-    var match = await bcrypt.compare(req.body.oldpassword, result[0].password)
-    if (!match) {
-        res.send("wrong old password")
+    if (req.body.oldpassword == "" && req.body.newpassword == "") {
+        hashedpassword = result.password
     }
     else {
-        var hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
-        var result = await clientModel.editPassowrd(hashedpassword, req.session.email)
-        res.send("ok")
+        var match = await bcrypt.compare(req.body.oldpassword, result.password)
+        if (!match) {
+            res.send("wrong old password")
+            return;
+        }
+        hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
     }
+    var result = await clientModel.editprofile(hashedpassword, req.session.email, req.body.name)
+    req.session.user = req.body.name
+    res.send("ok")
 }
 
 

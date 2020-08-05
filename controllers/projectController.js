@@ -4,6 +4,7 @@ const diagramModel = require('../models/diagram');
 const encryptModel = require('../models/encrypt_decrypt')
 const clientModel = require('../models/client')
 const businessAnalystModel = require('../models/businessAnalyst')
+const clientController = require('../controllers/clientController')
 const formidable = require('formidable');
 const mv = require('mv');
 const path = require('path');
@@ -41,6 +42,10 @@ module.exports.projectHome = async function (req, res) {
 };
 
 module.exports.inviteClient = async function (req, res) {
+    var client = await clientModel.getClientByEmail(req.query.mail);
+    if(client===null){
+        await clientController.insertNewClient(req,res);
+    }
     if (req.query.name) {
         var result = await model.getProjectByBaAndName(req.session.baid, req.query.name);
         var encryptedMail = encryptModel.encrypt(req.query.mail);

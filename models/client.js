@@ -46,14 +46,14 @@ module.exports.updateTokenAndExpireTokenOfClient = async function(token,expireto
 module.exports.insertNewClient = async function(name,email,hashedpassword){
 	let sql = "INSERT INTO client (name,email,password) VALUES (?,?,?) ";
         let inserts = [name, email, hashedpassword]
-        sql = db.format(sql, inserts);
+        sql = con.format(sql, inserts);
         const output = await query(sql);
         return output;
 }
-module.exports.editPassword = async function (hashedpassword, email) {
-	let sql = "update client set password = ? where email = ? "
-	let inserts = [hashedpassword, email]
-	sql = db.format(sql, inserts);
+module.exports.editprofile = async function (hashedpassword, email,name) {
+	let sql = "update client set password = ? , name = ?  where email = ? "
+	let inserts = [hashedpassword,name,email]
+	sql = con.format(sql, inserts);
 	const output = await query(sql);
 	return output;
 }
