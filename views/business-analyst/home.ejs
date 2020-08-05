@@ -73,12 +73,12 @@
                                     </div>
                                 </div>
                             </a>
-                            <form class="app-search position-absolute">
-                                <input type="text" class="form-control" placeholder="Search &amp; enter">
+                            <div class="app-search position-absolute">
+                                <input id="keywordInput" type="text" class="form-control" placeholder="Search &amp; enter">
                                 <a class="srh-btn">
                                     <i class="ti-close"></i>
                                 </a>
-                            </form>
+                            </div>
                         </li>
                     </ul>
                     <!-- ============================================================== -->
@@ -283,6 +283,57 @@
     <script src="/assets/dist/js/custom.min.js"></script>
     <script src="/assets/dist/js/pages/dashboards/dashboard1.js"></script>
     <script src="/assets/js/script.js"></script>
-</body>
+    <script src="/assets/mark.min.js"></script>
+
+    <script>
+        
+        var keywordInput = document.querySelector("#keywordInput")
+        var markInstance = new Mark(document.querySelector("body"));
+        var current = -1;
+
+        function jumpTo(){
+            var marks = document.getElementsByTagName('mark');
+            console.log(marks.length);
+            if(marks.length != 0){
+                if(current != -1)
+                    marks[current].style = 'background-color: yellow'
+                current++;
+                if(current >= marks.length)
+                    current = 0;
+                marks[current].scrollIntoView({
+                    behavior: "smooth",
+                    block: "center",
+                    inline: "center" 
+                });
+                marks[current].style = 'background-color: red'
+            }
+        }
+        var options = Object();
+        options.separateWordSearch = false
+        function performMark(e) {
+            var keyword = keywordInput.value;
+            if(e.keyCode == 13)
+            {
+                jumpTo();
+                return
+            }
+            else
+                current = -1
+            markInstance.unmark({
+                done: function(){
+                    markInstance.mark(keyword, options);
+                    // jumpTo();
+                }
+            });
+        };
+        keywordInput.onkeyup = performMark;
+   
+        
+    
+    
+    </script>
+
+    </body>
+
 
 </html>
