@@ -58,6 +58,7 @@ module.exports.inviteClient = async function (req, res) {
         res.send(200)
     }
     else {
+        // add fel session el url to redirect
         res.redirect("/")
     }
 }
