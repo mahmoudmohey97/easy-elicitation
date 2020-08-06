@@ -3,7 +3,6 @@ var businessAnalystModel = require("../models/businessAnalyst");
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 var sendemail = require('../sendmail')
-
 module.exports.home = async function (req, res) {
 	if (!req.session.baid) {
 		res.redirect("/BAloginpage");
@@ -25,10 +24,10 @@ module.exports.home = async function (req, res) {
 
 module.exports.getBAsInMyCompany = async function (req, res) {
 	if (!req.session.baid) {
-		res.render('errors/404');
+		
+		res.render('/BAloginpage');
 	}
 	else {
-		console.log('called');
 
 		var result = await businessAnalystModel.getBaById(req.session.baid);
 		var bas = await businessAnalystModel.getBusinessAnalystsByCompanyName(result.companyName);
@@ -61,13 +60,14 @@ exports.businessLogin = async function (req, res) {
 					req.session.email = result[0].email;
 					req.session.baid = result[0].businessAnalystId;
 					req.session.companyName = result[0].companyName;
-					res.send("successfully loggedin")
 					if(req.session.redirectTo)
                     {
                         var temp = req.session.redirectTo;
                         req.session.redirectTo = null;
-                        res.redirect(temp)
-                    }
+                        res.send(temp)
+					}
+					else
+						res.send("/")
 				}
 			})
 	}
@@ -102,25 +102,32 @@ exports.resetPassword = async function (req, res) {
 	var email = req.body.email
 	var token = req.body.token
 	var result = await businessAnalystModel.getBAByEmailAndToken(email.token)
-	var expireToken = result[0].expireToken;
+	var expireToken = result.expireToken;
 	if (parseInt(expireToken) >= parseInt(Date.now().toString())) {
 		var hashedpassword = await bcrypt.hash(newpassword, 12)
 		var updateresult = await businessAnalystModel.updateBAPassword(hashedpassword, email)
 		res.redirect('/')
 	}
+	res.send("token expired")
 }
-module.exports.editpassword = async function (req, res) {
+module.exports.editprofile = async function (req, res) {
+    var hashedpassword;
     var result = await businessAnalystModel.getBAByEmail(req.session.email)
     if (result.length == 0) {
         res.send("user not found")
     }
-    var match = await bcrypt.compare(req.body.oldpassword, result[0].password)
-    if (!match) {
-        res.send("wrong old password")
+    if (req.body.oldpassword == "" && req.body.newpassword == "") {
+        hashedpassword = result[0].password
     }
     else {
-        var hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
-        var result = await businessAnalystModel.editPassowrd(hashedpassword, req.session.email)
-        res.send("ok")
+        var match = await bcrypt.compare(req.body.oldpassword, result[0].password)
+        if (!match) {
+            res.send("wrong old password")
+            return;
+        }
+        hashedpassword = await bcrypt.hash(req.body.newpassword, 12)
     }
+    var result = await businessAnalystModel.editprofile(hashedpassword, req.session.email, req.body.name)
+    req.session.user = req.body.name
+    res.send("ok")
 }

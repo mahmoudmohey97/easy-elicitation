@@ -54,13 +54,20 @@
                             </a>
                             <div class="app-search position-absolute">
                                 <input id="keywordInput" type="text" class="form-control" placeholder="Search &amp; enter">
-                                <a class="srh-btn">
+                                <a id="srh-btn" class="srh-btn">
                                     <i class="ti-close"></i>
                                 </a>
                             </div>
                         </li>
                         <li style="color: white;margin: auto 30px;font-size: large;">
                             <%= projectName %>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav float-right" style="margin: 10px; ">
+                        <li>
+                        <a class="sidebar-link waves-effect waves-dark sidebar-link logout-btn" href="/editprofilepage?type=<%if(auth == true){%>BA<%} else {%>client<%}%>"  aria-expanded="false">
+                                <span class="hide-menu">Edit profile</span>
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav float-right">
@@ -157,7 +164,7 @@
                                             <% if(auth){
                                             %>
                                         <button style="background: transparent; color: gray; padding: 5px" onclick="addRelation('relationDiv<%= i %>')"> Add Relation </button>
-                                            <% if (!approved.some(approve => approve.did === diagrams[i].diagramId)) {%>
+                                            <% }if (!approved.some(approve => approve.did === diagrams[i].diagramId)) {%>
                                             <a href="/approveDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Approve">
                                                 <i class="ti-check"style="font-size: 20px;"></i>
                                             </a>
@@ -166,6 +173,8 @@
                                                     <i class="ti-check" style="font-size: 20px; color:green"></i>
                                                 </a>
                                             <% } %>
+                                            <% if(auth){
+                                            %>
                                             <a href="/deleteDiagram?did=<%=diagrams[i].diagramId%>" data-toggle="tooltip" data-placement="top" title="Delete">
                                                 <i class="mdi mdi-delete" style="font-size: 25px;"></i>
                                             </a>
@@ -215,9 +224,10 @@
                                             <td class="font-medium"><%= diagramsRelations[k].diagram1Name%> </td>
                                             <td class="text-muted"><%= diagramsRelations[k].type %></td>
                                             <td class="font-medium"><%= diagramsRelations[k].diagram2Name%></td>
+                                            <% if(auth){%>
                                             <td style="padding: 10px"><button class="btn btn-danger" onclick="deleteRelation('<%= diagramsRelations[k].relationId%>')"> delete</button></td>
                                         </tr>
-                                        <%}%>
+                                        <%}}%>
                                         
                                     </tbody>
                                 </table>
@@ -680,6 +690,14 @@ function performMark(e) {
     if(e.keyCode == 13)
     {
         jumpTo();
+        return
+    }
+    else if(e.keyCode == 27)
+    {
+        markInstance.unmark();
+        current = -1;
+        document.querySelector("#srh-btn").click()
+        keywordInput.value = "";
         return
     }
     else

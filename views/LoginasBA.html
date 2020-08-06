@@ -14,7 +14,7 @@
   <script>  // this script is to check the user existance in db update
     function validateLoginForm(form, event) {
       event.preventDefault();
-      console.log("hss")
+
       var result = true;
       if (document.getElementById("emailerror").innerHTML != "") {
         document.getElementById("emailerror").innerHTML = "";
@@ -45,14 +45,17 @@
       xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
           console.log(this.responseText)
-          if (this.responseText !== "successfully loggedin") {
+          if (this.responseText === "Invalid email or password") {
             alert("Invalid email or password")
           }
-          else {
-            document.location = "/ba";
+          else if(this.responseText.includes('/')){
+            document.location = this.responseText
           }
+          else
+            document.location = "/";
         }
-      };
+      
+      }
 
       xhttp.open("POST", window.location.origin + "/businesslogin", true);
       xhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -72,7 +75,7 @@
   <div class="mycard">
     <div class="card auth-card input-field">
       <h2>Easy Elicitation</h2>
-      <h5>welcome Bussiness Analyst</h5>
+      <h5>welcome business Analyst</h5>
       <form onsubmit="return validateLoginForm(this,event)">
         <input type="text" placeholder="email" name="email" id="email"/>
         <div id="emailerror"></div>
@@ -80,7 +83,7 @@
         <a href="/forgotpassword?type=BA">Forgot Password?</a>
         <div id="passworderror">
         </div>
-        <button class="btn waves-effect waves-light #42a5f5 blue darken-1 loginbutton #424242 grey darken-3">
+        <button class="btn waves-effect waves-light loginbutton" style=" background-color: #05052c;">
           Login
         </button>
       </form>

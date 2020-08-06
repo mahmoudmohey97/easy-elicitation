@@ -75,7 +75,7 @@
                             </a>
                             <div class="app-search position-absolute">
                                 <input id="keywordInput" type="text" class="form-control" placeholder="Search &amp; enter">
-                                <a class="srh-btn">
+                                <a id="srh-btn" class="srh-btn">
                                     <i class="ti-close"></i>
                                 </a>
                             </div>
@@ -84,6 +84,13 @@
                     <!-- ============================================================== -->
                     <!-- Right side toggle and nav items -->
                     <!-- ============================================================== -->
+                    <ul class="navbar-nav float-right" style="margin-right: 10px;">
+                        <li>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link logout-btn" href="/editprofilepage?type=BA" aria-expanded="false">
+                                <span class="hide-menu">Edit profile</span>
+                            </a>
+                        </li>
+                    </ul>
                     <ul class="navbar-nav float-right">
                     
                         <li>
@@ -178,7 +185,7 @@
             <!-- ============================================================== -->
             <!-- Container fluid  -->
             <!-- ============================================================== -->
-            <div class="container-fluid">
+            <div class="container-fluid" style="min-height: fit-content;">
                 <!-- ============================================================== -->
                 <!-- Email campaign chart -->
                 <!-- ============================================================== -->
@@ -315,6 +322,14 @@
             if(e.keyCode == 13)
             {
                 jumpTo();
+                return
+            }
+            else if(e.keyCode == 27)
+            {
+                markInstance.unmark();
+                current = -1;
+                document.querySelector("#srh-btn").click()
+                keywordInput.value = "";
                 return
             }
             else

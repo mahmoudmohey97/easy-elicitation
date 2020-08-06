@@ -107,8 +107,21 @@ router.post('/resetpassword', function (req, res) {
     }
 })
 router.post('/insertnewclient', clientController.insertNewClient);
-router.post('/clienteditpassword', clientController.editpassword);
-router.post('/baeditpassword', businessAnalystController.editpassword);
+router.post('/editprofile',function(req,res){
+    console.log(req.body.type)
+    if (req.body.type == "BA") {
+        businessAnalystController.editprofile(req, res)
+    }
+    else {
+        clientController.editprofile(req, res)
+    }
+})
+router.get('/editprofilepage',function(req,res){
+    res.render('editprofile',{
+        name:req.session.user,
+        type:req.query.type
+    })
+})
 
 
 module.exports = router;

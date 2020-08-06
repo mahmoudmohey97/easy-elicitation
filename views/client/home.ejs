@@ -54,10 +54,17 @@
                             </a>
                             <div class="app-search position-absolute">
                                 <input id="keywordInput" type="text" class="form-control" placeholder="Search &amp; enter">
-                                <a class="srh-btn">
+                                <a id="srh-btn" class="srh-btn">
                                     <i class="ti-close"></i>
                                 </a>
                             </div>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav float-right" style="margin-right: 10px;">
+                        <li>
+                            <a class="sidebar-link waves-effect waves-dark sidebar-link logout-btn" href="/editprofilepage?type=client" aria-expanded="false">
+                                <span class="hide-menu">Edit profile</span>
+                            </a>
                         </li>
                     </ul>
                     <ul class="navbar-nav float-right">
@@ -152,6 +159,14 @@
             if(e.keyCode == 13)
             {
                 jumpTo();
+                return
+            }
+            else if(e.keyCode == 27)
+            {
+                markInstance.unmark();
+                current = -1;
+                document.querySelector("#srh-btn").click()
+                keywordInput.value = "";
                 return
             }
             else
