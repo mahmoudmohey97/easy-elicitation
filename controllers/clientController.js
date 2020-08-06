@@ -32,8 +32,13 @@ module.exports.clientLogin = async function (req, res) {
                     req.session.user = result.name;
                     req.session.email = result.email;
                     req.session.cid = result.clientId;
-                    req.session.save()
                     res.send("successfully loggedin")
+                    if(req.session.redirectTo)
+                    {
+                        var temp = req.session.redirectTo;
+                        req.session.redirectTo = null;
+                        res.redirect(temp)
+                    }
                 }
             })
     }

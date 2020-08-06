@@ -61,8 +61,13 @@ exports.businessLogin = async function (req, res) {
 					req.session.email = result[0].email;
 					req.session.baid = result[0].businessAnalystId;
 					req.session.companyName = result[0].companyName;
-					req.session.save()
 					res.send("successfully loggedin")
+					if(req.session.redirectTo)
+                    {
+                        var temp = req.session.redirectTo;
+                        req.session.redirectTo = null;
+                        res.redirect(temp)
+                    }
 				}
 			})
 	}

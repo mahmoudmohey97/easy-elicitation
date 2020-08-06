@@ -193,7 +193,7 @@ function getBas() {
   xhttp.onreadystatechange = function () {
     if (this.readyState == 4 && this.status == 200) {
       var arr = this.responseText.split(",");
-      for (var i = 0; i < arr.length; ++i) {
+      for (var i = 0; i < arr.length - 1; ++i) {
         var node = document.createElement("DIV");
         node.setAttribute("id", i);
         var subNode1 = document.createElement("INPUT");
@@ -205,12 +205,16 @@ function getBas() {
         node.appendChild(textnode);
         document.getElementById("ba-list").appendChild(node);
       }
-      var button = document.createElement("button");
-      button.setAttribute('type', "button");
-      button.setAttribute('onclick', "inviteBas()");
-      button.setAttribute("style", "float:left ;");
-      button.innerHTML = "Invite";
-      document.getElementById("ba-list").appendChild(button);
+
+
+      document.getElementById("nextBtn").setAttribute('onclick', "inviteBas()");
+
+      // var button = document.createElement("button");
+      // button.setAttribute('type', "button");
+      // button.setAttribute('onclick', "inviteBas()");
+      // button.setAttribute("style", "float:left ;");
+      // button.innerHTML = "Invite";
+      // document.getElementById("ba-list").appendChild(button);
     }
 
   };
@@ -232,8 +236,12 @@ function inviteBas() {
       success: function () {
 
         nextPrev(1);
-
+        
       }
     });
+  }
+  else
+  {
+    nextPrev(1);
   }
 }

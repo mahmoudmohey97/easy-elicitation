@@ -59,11 +59,12 @@ module.exports.inviteClient = async function (req, res) {
     }
     else {
         // add fel session el url to redirect
-        res.redirect("/")
+        res.redirect("/client")
     }
 }
 
 module.exports.handleClientInvitationLink = async function (req, res) {
+
     if (req.session.cid) {
         var urlMail = req.query.to;
         var currentUserMail = '';
@@ -87,8 +88,8 @@ module.exports.handleClientInvitationLink = async function (req, res) {
 
     }
     else {
-        // req.session.fromUrl = 
-        res.redirect("/")
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
+        res.redirect("/client")
     }
 }
 
@@ -113,7 +114,7 @@ module.exports.inviteBA = async function (req, res) {
         res.send();
     }
     else
-        res.redirect('/')
+        res.redirect('/BAloginpage')
 }
 
 module.exports.handleBAInvitationLink = async function (req, res) {
@@ -139,9 +140,8 @@ module.exports.handleBAInvitationLink = async function (req, res) {
         }
     }
     else {
-        // el awl Login
-        // redirect 3la el funtion de
-        res.render("/")
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
+        res.redirect("/BAloginpage")
     }
 }
 
@@ -207,6 +207,8 @@ module.exports.leaveProject = async function (req, res) {
     }
     else {
         //login
+        
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
         res.redirect('/')
         // console("u must login");
     }
