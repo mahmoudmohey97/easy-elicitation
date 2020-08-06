@@ -31,6 +31,13 @@
                 document.getElementById("nameerror").innerHTML = "";
                 form.name.style.borderColor = "black";
             }
+            if (form.name.value == "") {
+                    form.name.focus();
+                    form.name.style.borderColor = "red";
+                    document.getElementById("nameerror").innerHTML = "please enter a user name";
+                    document.getElementById("nameerror").style.color = "red";
+                    result = false;
+                }
             if (!(form.oldpassword.value == "" && form.newpassword.value == "" && form.confirm.value == "")) {
                 if (form.oldpassword.value == "") {
                     form.oldpassword.focus();
