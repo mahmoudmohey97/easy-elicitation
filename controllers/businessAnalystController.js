@@ -3,7 +3,6 @@ var businessAnalystModel = require("../models/businessAnalyst");
 const bcrypt = require('bcryptjs')
 const crypto = require('crypto')
 var sendemail = require('../sendmail')
-
 module.exports.home = async function (req, res) {
 	if (!req.session.baid) {
 		res.redirect("/BAloginpage");
@@ -25,10 +24,10 @@ module.exports.home = async function (req, res) {
 
 module.exports.getBAsInMyCompany = async function (req, res) {
 	if (!req.session.baid) {
-		res.render('errors/404');
+		
+		res.render('/BAloginpage');
 	}
 	else {
-		console.log('called');
 
 		var result = await businessAnalystModel.getBaById(req.session.baid);
 		var bas = await businessAnalystModel.getBusinessAnalystsByCompanyName(result.companyName);
@@ -61,8 +60,14 @@ exports.businessLogin = async function (req, res) {
 					req.session.email = result[0].email;
 					req.session.baid = result[0].businessAnalystId;
 					req.session.companyName = result[0].companyName;
-					req.session.save()
-					res.send("successfully loggedin")
+					if(req.session.redirectTo)
+                    {
+                        var temp = req.session.redirectTo;
+                        req.session.redirectTo = null;
+                        res.send(temp)
+					}
+					else
+						res.send("/")
 				}
 			})
 	}

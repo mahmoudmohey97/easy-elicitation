@@ -15,6 +15,10 @@ module.exports.projectHome = async function (req, res) {
     if ((req.session.baid || req.session.cid) && req.query.pid) {
 
         var project = await model.getProjectById(req.query.pid);
+        if (project === null) {
+            res.render('errors/404')
+            return
+        }
         var baParticipants = await model.getProjectBa(req.query.pid);
         // console.log(baParticipants);
         var approved = (req.session.baid) ? await diagramModel.getBaApprovals(req.session.baid) : await diagramModel.getCApprovals(req.session.cid);
@@ -27,6 +31,11 @@ module.exports.projectHome = async function (req, res) {
         var attachements = await model.getAllAttachments(req.query.pid);
         var ba = (!req.session.baid) ? false : true;
         var userId = (!req.session.baid) ? req.session.cid : req.session.baid;
+        if (checkAccess(req, baParticipants, clientsParticipants, owner) === false) {
+            res.render('errors/404')
+            return;
+        }
+
         res.render('project/projectHome', {
             projectName: project.name,
             auth: ba, diagrams: projectDiagrams, businessAnalysts: baParticipants,
@@ -41,10 +50,35 @@ module.exports.projectHome = async function (req, res) {
     }
 };
 
+function checkAccess(req, baParticipants, clients, owner) {
+    if (req.session.baid) {
+        for (var i = 0; i < baParticipants.length; ++i) {
+            if (baParticipants[i].businessAnalystId === req.session.baid) {
+                return true;
+            }
+        }
+        if (req.session.baid !== owner.businessAnalystId)
+            return false
+        else
+            return true
+    }
+    else if (req.session.cid) {
+
+        for (var i = 0; i < clients.length; ++i) {
+            if (clients[i].clientId === req.session.cid)
+                return true;
+        }
+        return false
+
+    }
+    else
+        return false;
+}
+
 module.exports.inviteClient = async function (req, res) {
     var client = await clientModel.getClientByEmail(req.query.mail);
-    if(client===null){
-        await clientController.insertNewClient(req,res);
+    if (client === null) {
+        await clientController.insertNewClient(req, res);
     }
     if (req.query.name) {
         var result = await model.getProjectByBaAndName(req.session.baid, req.query.name);
@@ -69,7 +103,28 @@ module.exports.inviteClient = async function (req, res) {
 }
 
 module.exports.handleClientInvitationLink = async function (req, res) {
+
     if (req.session.cid) {
+
+        var project = await model.getProjectById(req.query.pid);
+        if (project === null) {
+            res.render('errors/404')
+            return
+        }
+        var found = false;
+        var clients = await model.getProjectClients(req.query.pid)
+        for(var i = 0; i < clients.length; ++i){
+            if(clients[i].clientId === req.session.cid)
+            {
+                found = true;
+                break;
+            }
+        }
+        if(found == true)
+        {
+            res.render('errors/expired')
+            return;
+        }
         var urlMail = req.query.to;
         var currentUserMail = '';
         var decryptedMail = encryptModel.decrypt(urlMail);
@@ -78,21 +133,24 @@ module.exports.handleClientInvitationLink = async function (req, res) {
         currentUserMail = client.email;
         if (urlMail === currentUserMail) {
             var time = req.query.dt;
-            if (parseInt(Date.now() / 1000) <= parseInt(time) + 2 * 60) {
+            if (parseInt(Date.now() / 1000) <= parseInt(time) + 10 * 60 * 60) {
                 var result = model.clientInvitation(req.session.cid, req.query.pid);
                 res.redirect(`/project?pid=${req.query.pid}`)
             }
             else {
-                res.render('errors/404'); // expired
+                res.render('errors/expired'); // expiredd
             }
         }
         else {
-            res.sendStatus(403);
+            res.render('errors/403')
         }
 
     }
+    else if (req.session.baid) {
+        res.render('errors/403')
+    }
     else {
-        // req.session.fromUrl = 
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
         res.redirect("/")
     }
 }
@@ -123,6 +181,26 @@ module.exports.inviteBA = async function (req, res) {
 
 module.exports.handleBAInvitationLink = async function (req, res) {
     if (req.session.baid) {
+        
+        var project = await model.getProjectById(req.query.pid);
+        if (project === null) {
+            res.render('errors/404')
+            return
+        }
+        var found = false;
+        var bas = await model.getProjectBa(req.query.pid)
+        for(var i = 0; i < bas.length; ++i){
+            if(bas[i].businessAnalystId === req.session.baid)
+            {
+                found = true;
+                break;
+            }
+        }
+        if(found == true)
+        {
+            res.render('errors/expired')
+            return;
+        }
         var urlMail = req.query.to;
         var currentUserMail = '';
         var decryptedMail = encryptModel.decrypt(urlMail);
@@ -131,22 +209,24 @@ module.exports.handleBAInvitationLink = async function (req, res) {
         currentUserMail = output.email;
         if (urlMail.includes(currentUserMail)) {
             var time = req.query.dt;
-            if (parseInt(Date.now() / 1000) <= parseInt(time) + 2 * 60) {
+            if (parseInt(Date.now() / 1000) <= parseInt(time) + 10 * 60 * 60) {
                 await model.businessAnalystInvitation(req.session.baid, req.query.pid);
                 res.redirect(`/project?pid=${req.query.pid}`)
             }
             else {
-                res.render('errors/404'); // expired
+                res.render('errors/expired'); // expiredd
             }
         }
         else {
-            res.sendStatus(403);
+            res.render('errors/403')
         }
     }
+    else if (req.session.cid)
+        res.render('errors/403')
+
     else {
-        // el awl Login
-        // redirect 3la el funtion de
-        res.render("/")
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
+        res.redirect("/")
     }
 }
 
@@ -184,6 +264,7 @@ module.exports.uploadFile = async function (req, res) {
 
 module.exports.getBAsNotInProject = async function (req, res) {
     if (!req.session.baid) {
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
         res.redirect('/');
     }
     else {
@@ -211,9 +292,8 @@ module.exports.leaveProject = async function (req, res) {
         res.redirect('/client');
     }
     else {
-        //login
+        req.session.redirectTo = req.protocol + '://' + req.get('host') + req.originalUrl;
         res.redirect('/')
-        // console("u must login");
     }
 }
 

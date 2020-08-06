@@ -43,13 +43,15 @@
       var xhttp = new XMLHttpRequest();
       xhttp.onreadystatechange = function () {
         if (this.readyState == 4 && this.status == 200) {
-          console.log(this.responseText)
-          if (this.responseText !== "successfully loggedin") {
+          // console.log(this.responseText)
+          if (this.responseText === "Invalid email or password") {
             alert("Invalid email or password")
           }
-          else {
-            document.location = "/client";
+          else if(this.responseText.includes('/')){
+            document.location = this.responseText
           }
+          else
+            document.location = "/client";
         }
       };
 
